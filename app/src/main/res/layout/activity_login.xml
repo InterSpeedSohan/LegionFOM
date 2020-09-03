@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="For FOEM users only"
+        android:text="For FOM users only"
         android:textColor="@color/input_color"
         android:textSize="@dimen/semi_tittle_text_size"
         app:layout_constraintEnd_toEndOf="parent"
