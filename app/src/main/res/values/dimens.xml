@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_btn_size">35dp</dimen>
+    <dimen name="logo_height">35dp</dimen>
+    <dimen name="logo_width">30dp</dimen>
+    <dimen name="tittle_text_size">20sp</dimen>
+    <dimen name="semi_tittle_text_size">17sp</dimen>
+    <dimen name="small_text_size">15sp</dimen>
+    <dimen name="dock_panel_list_height">40dp</dimen>
+    <dimen name="percent_show_size">28sp</dimen>
+    <dimen name="btn_size">55dp</dimen>
+    <dimen name="top_bar_size">45dp</dimen>
+    <dimen name="box_height">40dp</dimen>
+    <dimen name="small_box_height">30dp</dimen>
+    <dimen name="date_height">35dp</dimen>
+
+</resources>

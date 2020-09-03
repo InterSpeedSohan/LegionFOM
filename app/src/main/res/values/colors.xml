@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+
+    <color name="background_color">#002f36</color>
+    <color name="input_color">#cad950</color>
+    <color name="text_color">#26492a</color>
+    <color name="tittle_bar_color">#325F60</color>
+    <color name="text_color_percent">#142426</color>
+    <color name="red">#F80202</color>
+    <color name="dark_red">#E33109</color>
+    <color name="red_black">#B14A33</color>
+    <color name="white">#ffffff</color>
+    <color name="light_white">#DDDFDD</color>
+    <color name="black">#000000</color>
+    <color name="light_black">#707070</color>
+    <color name="green">#00FF04</color>
+    <color name="light_green">#8cc63f</color>
+    <color name="yellow">#eddb43</color>
+    <color name="dark_green">#148026</color>
+    <color name="spinner_back_color">#cad950</color>
+    <color name="odd">#cad950</color>
+    <color name="even">#8cc63f</color>
+    <color name="orange">#FF9800</color>
+</resources>

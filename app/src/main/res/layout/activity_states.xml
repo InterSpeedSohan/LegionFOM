@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/top_bar_size"
+        android:background="@color/tittle_bar_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="@dimen/home_btn_size"
+            android:layout_height="@dimen/home_btn_size"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/home_btn"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="Stats Panel"
+            android:fontFamily="@font/arial"
+            android:textColor="@color/input_color"
+            android:textSize="@dimen/tittle_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.484" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/logo_width"
+            android:layout_height="@dimen/logo_height"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:id="@+id/secDailyAttenndanceBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="SEC Daily Attendance"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/attendanceBySecBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_orange"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="Attendance By SEC"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/secDailyAttenndanceBtn" />
+
+            <Button
+                android:id="@+id/dailyCustomerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_orange"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="Daily Cutomer"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/attendanceBySecBtn" />
+
+
+            <Button
+                android:id="@+id/customersBySecBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="Customers by SEC"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dailyCustomerBtn" />
+
+
+            <Button
+                android:id="@+id/attendanceSummaryBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="My Attendance Summary"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/customersBySecBtn" />
+
+
+            <Button
+                android:id="@+id/myDailyAttendanceBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="My Daily Attendance"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/attendanceSummaryBtn" />
+
+            <Button
+                android:id="@+id/myDailyRetailerVisitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="My Daily Retailer Visit"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/myDailyAttendanceBtn" />
+
+
+            <Button
+                android:id="@+id/myVisitByRetailerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="My Visit By Retailer"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/myDailyRetailerVisitBtn" />
+
+
+            <Button
+                android:id="@+id/videoBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_yellow"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="Video Tutorials"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/myVisitByRetailerBtn" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
