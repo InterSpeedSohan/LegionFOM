@@ -103,20 +103,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/yourAttendanceBtn" />
 
-        <Button
-            android:id="@+id/secEvaluation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/text_view_142426"
-            android:fontFamily="@font/arial"
-            android:foreground="?selectableItemBackground"
-            android:text="SEC Evaluation"
-            android:textAllCaps="false"
-            android:textSize="@dimen/semi_tittle_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teamAttendanceBtn" />
 
 
         <Button
@@ -132,7 +118,7 @@
             android:textSize="@dimen/semi_tittle_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/secEvaluation" />
+            app:layout_constraintTop_toBottomOf="@+id/teamAttendanceBtn" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class StatePanelActivity extends AppCompatActivity {
 
-    Button secDailyAttBtn, attendanceBySecBtn, dailyCustomerBtn, customerBySecBtn, myAttendanceSumBtn, myDailyAttendanceBtn, myDailyRTvisitBtn, myRTvisitByRTBtn, videoBtn;
+    Button secDailyAttBtn, attendanceBySecBtn, myAttendanceSumBtn, myDailyAttendanceBtn, videoBtn;
 
     ImageButton homeBtn;
 
@@ -23,12 +23,8 @@ public class StatePanelActivity extends AppCompatActivity {
 
         secDailyAttBtn = findViewById(R.id.secDailyAttenndanceBtn);
         attendanceBySecBtn = findViewById(R.id.attendanceBySecBtn);
-        dailyCustomerBtn = findViewById(R.id.dailyCustomerBtn);
-        customerBySecBtn = findViewById(R.id.customersBySecBtn);
         myAttendanceSumBtn = findViewById(R.id.attendanceSummaryBtn);
         myDailyAttendanceBtn = findViewById(R.id.myDailyAttendanceBtn);
-        myDailyRTvisitBtn = findViewById(R.id.myDailyRetailerVisitBtn);
-        myRTvisitByRTBtn = findViewById(R.id.myVisitByRetailerBtn);
         videoBtn = findViewById(R.id.videoBtn);
 
 

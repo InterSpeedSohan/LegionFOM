@@ -71,12 +71,41 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/foeDailyAttenndanceBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_view_green"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="FOE Daily Attendance"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/attendanceByFoeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_view_orange"
+                android:fontFamily="@font/arial"
+                android:foreground="?selectableItemBackground"
+                android:text="Attendance By FOE"
+                android:textAllCaps="false"
+                android:textSize="@dimen/semi_tittle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/foeDailyAttenndanceBtn" />
 
 
             <Button
                 android:id="@+id/secDailyAttenndanceBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/text_view_green"
                 android:fontFamily="@font/arial"
                 android:foreground="?selectableItemBackground"
@@ -85,7 +114,7 @@
                 android:textSize="@dimen/semi_tittle_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/attendanceByFoeBtn" />
 
             <Button
                 android:id="@+id/attendanceBySecBtn"
@@ -102,36 +131,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/secDailyAttenndanceBtn" />
 
-            <Button
-                android:id="@+id/dailyCustomerBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/text_view_orange"
-                android:fontFamily="@font/arial"
-                android:foreground="?selectableItemBackground"
-                android:text="Daily Cutomer"
-                android:textAllCaps="false"
-                android:textSize="@dimen/semi_tittle_text_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/attendanceBySecBtn" />
 
-
-            <Button
-                android:id="@+id/customersBySecBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/text_view_green"
-                android:fontFamily="@font/arial"
-                android:foreground="?selectableItemBackground"
-                android:text="Customers by SEC"
-                android:textAllCaps="false"
-                android:textSize="@dimen/semi_tittle_text_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dailyCustomerBtn" />
 
 
             <Button
@@ -147,7 +147,7 @@
                 android:textSize="@dimen/semi_tittle_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/customersBySecBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/attendanceBySecBtn" />
 
 
             <Button
@@ -165,36 +165,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/attendanceSummaryBtn" />
 
-            <Button
-                android:id="@+id/myDailyRetailerVisitBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/text_view_green"
-                android:fontFamily="@font/arial"
-                android:foreground="?selectableItemBackground"
-                android:text="My Daily Retailer Visit"
-                android:textAllCaps="false"
-                android:textSize="@dimen/semi_tittle_text_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myDailyAttendanceBtn" />
-
-
-            <Button
-                android:id="@+id/myVisitByRetailerBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/text_view_green"
-                android:fontFamily="@font/arial"
-                android:foreground="?selectableItemBackground"
-                android:text="My Visit By Retailer"
-                android:textAllCaps="false"
-                android:textSize="@dimen/semi_tittle_text_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myDailyRetailerVisitBtn" />
 
 
             <Button
@@ -210,7 +180,7 @@
                 android:textSize="@dimen/semi_tittle_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myVisitByRetailerBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/myDailyAttendanceBtn" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

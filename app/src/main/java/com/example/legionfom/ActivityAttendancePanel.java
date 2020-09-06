@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.legionfom.helper.CustomUtility;
+
 public class ActivityAttendancePanel extends AppCompatActivity {
     Button yourAttendanceBtn, teamAttendanceBtn, leaveBtn, evaluationBtn;
 
@@ -23,7 +25,6 @@ public class ActivityAttendancePanel extends AppCompatActivity {
 
         yourAttendanceBtn = findViewById(R.id.yourAttendanceBtn);
         teamAttendanceBtn = findViewById(R.id.teamAttendanceBtn);
-        evaluationBtn = findViewById(R.id.secEvaluation);
         leaveBtn = findViewById(R.id.leaveAuthorizationBtn);
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +34,7 @@ public class ActivityAttendancePanel extends AppCompatActivity {
                 finish();
             }
         });
-/*
+
         yourAttendanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +49,7 @@ public class ActivityAttendancePanel extends AppCompatActivity {
                 }
             }
         });
+        /*
         teamAttendanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

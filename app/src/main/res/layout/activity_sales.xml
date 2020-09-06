@@ -84,14 +84,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/salesByRetailersBtn"
+            android:id="@+id/salesByTerritoriesBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/text_view_orange"
             android:fontFamily="@font/arial"
             android:foreground="?selectableItemBackground"
-            android:text="Sales By Retailers"
+            android:text="Sales By Territories"
             android:textAllCaps="false"
             android:textSize="@dimen/semi_tittle_text_size"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,11 +99,26 @@
             app:layout_constraintTop_toBottomOf="@+id/dailySalesBtn" />
 
         <Button
-            android:id="@+id/salesByProductBtn"
+            android:id="@+id/salesByRetailersBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/text_view_green"
+            android:fontFamily="@font/arial"
+            android:foreground="?selectableItemBackground"
+            android:text="Sales By Retailers"
+            android:textAllCaps="false"
+            android:textSize="@dimen/semi_tittle_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/salesByTerritoriesBtn" />
+
+        <Button
+            android:id="@+id/salesByProductBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/text_view_orange"
             android:fontFamily="@font/arial"
             android:foreground="?selectableItemBackground"
             android:text="Sales By Products"
