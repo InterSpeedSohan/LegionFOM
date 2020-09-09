@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LegionFOEM</string>
+    <string name="app_name">LegionFOM</string>
     <string name="gps_network_not_enabled">Gps not enabled</string>
     <string name="absent">You are absent</string>
     <string name="absent_brief">You are absent. Please follow the steps given below.</string>
