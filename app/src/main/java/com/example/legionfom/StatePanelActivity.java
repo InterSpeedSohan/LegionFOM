@@ -1,5 +1,6 @@
 package com.example.legionfom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class StatePanelActivity extends AppCompatActivity {
 
-    Button secDailyAttBtn, attendanceBySecBtn, myAttendanceSumBtn, myDailyAttendanceBtn, videoBtn;
+    Button foeDailyAttBtn, attendanceByFoeBtn, secDailyAttBtn, attendanceBySecBtn, myAttendanceSumBtn, myDailyAttendanceBtn, videoBtn;
 
     ImageButton homeBtn;
 
@@ -21,6 +22,9 @@ public class StatePanelActivity extends AppCompatActivity {
 
         homeBtn = findViewById(R.id.homeBtn);
 
+
+        foeDailyAttBtn = findViewById(R.id.foeDailyAttenndanceBtn);
+        attendanceByFoeBtn = findViewById(R.id.attendanceByFoeBtn);
         secDailyAttBtn = findViewById(R.id.secDailyAttenndanceBtn);
         attendanceBySecBtn = findViewById(R.id.attendanceBySecBtn);
         myAttendanceSumBtn = findViewById(R.id.attendanceSummaryBtn);
@@ -34,7 +38,16 @@ public class StatePanelActivity extends AppCompatActivity {
                 finish();
             }
         });
-/*
+
+
+
+        attendanceByFoeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(StatePanelActivity.this,ActivityAttendanceByFoe.class));
+            }
+        });
+
         secDailyAttBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +61,7 @@ public class StatePanelActivity extends AppCompatActivity {
                 startActivity(new Intent(StatePanelActivity.this,ActivityAttendanceBySec.class));
             }
         });
-
+/*
         dailyCustomerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +75,7 @@ public class StatePanelActivity extends AppCompatActivity {
                 startActivity(new Intent(StatePanelActivity.this, ActivityCustomerBySec.class));
             }
         });
-
+*/
         myAttendanceSumBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +91,7 @@ public class StatePanelActivity extends AppCompatActivity {
 
             }
         });
-
+/*
         myDailyRTvisitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

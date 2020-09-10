@@ -31,6 +31,16 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".YourAttendancePanel"
             android:screenOrientation="portrait"/>
+        <activity android:name=".MyAttendanceSummaryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MyDailyAttendance"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ActivityAttendanceBySec"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ActivitySecDailyAttendance"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ActivityAttendanceByFoe"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
