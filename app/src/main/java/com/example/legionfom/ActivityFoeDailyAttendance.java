@@ -1,6 +1,8 @@
 package com.example.legionfom;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,13 +47,15 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class ActivityAttendanceByFoe extends AppCompatActivity {
+public class ActivityFoeDailyAttendance extends AppCompatActivity {
+
     RecyclerView recyclerView;
     DataAdapter mAdapter;
     private ArrayList<FoeAttendanceDataModel> dataList = new ArrayList<FoeAttendanceDataModel>();
 
     ImageButton homeBtn;
 
+    Button foeBtn, delFoeBtn;
 
     public static String code = "", message = "";
 
@@ -65,6 +69,7 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
     String myFormat = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
+
     SweetAlertDialog sweetAlertDialog,progressDialog,pDialog;
     JSONObject jsonObject;
     JSONArray jsonArray;
@@ -74,22 +79,24 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-    String secName = "", secId = "";
+    String foeName = "", foeId = "";
     ArrayAdapter<String> arrayAdapter;
-    ArrayList secList = new ArrayList<String>();
-    Map<Integer,String> secIdMap = new HashMap<>();
-    String  s, sid;
+    ArrayList foeList = new ArrayList<String>();
+    Map<Integer,String> foeIdMap = new HashMap<>();
+    String  f, fid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_attendance_by_foe);
+        setContentView(R.layout.activity_foe_daily_attendance);
 
         sharedPreferences = getSharedPreferences("fom_user",MODE_PRIVATE);
 
         homeBtn = findViewById(R.id.homeBtn);
 
+        foeBtn = findViewById(R.id.foeBtn);
+        delFoeBtn = findViewById(R.id.delFoeBtn);
 
         txtFromdate = findViewById(R.id.fromdate);
         txtTodate = findViewById(R.id.todate);
@@ -119,7 +126,6 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
                 finish();
             }
         });
-
         // making from date as first date of current month
         myCalendar.set(Calendar.DAY_OF_MONTH,1);
         fromDate = sdf.format(myCalendar.getTime());
@@ -127,6 +133,47 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
         toDate = sdf.format(myCalendar2.getTime());
         txtTodate.setText(toDate);
 
+
+
+        delFoeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foeId = "";
+                foeBtn.setText("Select SEC");
+                foeName = "";
+                getDetails();
+            }
+        });
+
+
+        foeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder modelDialog = new AlertDialog.Builder(ActivityFoeDailyAttendance.this);
+                modelDialog.setIcon(R.drawable.logo);
+                modelDialog.setTitle("Select a model");
+                arrayAdapter = new ArrayAdapter<>(ActivityFoeDailyAttendance.this, R.layout.custom_list_item, foeList);
+
+                modelDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                modelDialog.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        foeName = arrayAdapter.getItem(which);
+                        foeId = foeIdMap.get(which);
+                        Log.e("foeId: ",foeId);
+                        foeBtn.setText(foeName);
+                        getDetails();
+                    }
+                });
+                modelDialog.show();
+            }
+        });
 
         final DatePickerDialog.OnDateSetListener fromdate = new DatePickerDialog.OnDateSetListener() {
 
@@ -146,7 +193,7 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
         fromBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(ActivityAttendanceByFoe.this, fromdate, myCalendar
+                new DatePickerDialog(ActivityFoeDailyAttendance.this, fromdate, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -165,14 +212,14 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
                 if(myCalendar.compareTo(myCalendar2) == 1)
                 {
                     txtTodate.setText("");
-                    CustomUtility.showWarning(ActivityAttendanceByFoe.this,"Select correct date","Failed");
+                    CustomUtility.showWarning(ActivityFoeDailyAttendance.this,"Select correct date","Failed");
                 }
                 else{
                     updateToDate();
 
-                    networkAvailable = CustomUtility.haveNetworkConnection(ActivityAttendanceByFoe.this);
+                    networkAvailable = CustomUtility.haveNetworkConnection(ActivityFoeDailyAttendance.this);
                     if (networkAvailable) getDetails();
-                    else CustomUtility.showWarning(ActivityAttendanceByFoe.this,"Please turn on internet connection","No inernet");
+                    else CustomUtility.showWarning(ActivityFoeDailyAttendance.this,"Please turn on internet connection","No inernet");
                 }
 
             }
@@ -184,11 +231,11 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
             public void onClick(View v) {
                 if(fromDate.equals(""))
                 {
-                    CustomUtility.showWarning(ActivityAttendanceByFoe.this,"Select from date first","Failed");
+                    CustomUtility.showWarning(ActivityFoeDailyAttendance.this,"Select from date first","Failed");
                 }
                 else
                 {
-                    new DatePickerDialog(ActivityAttendanceByFoe.this, todate, myCalendar2
+                    new DatePickerDialog(ActivityFoeDailyAttendance.this, todate, myCalendar2
                             .get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
                             myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
                 }
@@ -213,8 +260,7 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
 
     public void getFoeList()
     {
-        dataList.clear();
-        progressDialog = new SweetAlertDialog(ActivityAttendanceByFoe.this, SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog = new SweetAlertDialog(ActivityFoeDailyAttendance.this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setTitle("Please wait....");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -231,34 +277,39 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
                             jsonObject = new JSONObject(response);
                             code = jsonObject.getString("success");
                             message = jsonObject.getString("message");
+                            int index = 0;
                             if(code.equals("true"))
                             {
                                 jsonArray = jsonObject.getJSONArray("employeeList");
                                 for (int i = 0;i<jsonArray.length();i++)
                                 {
-                                    jo = jsonArray.getJSONObject(i);
-                                    if(!jo.getString("designation_name").equals("FOE")) continue;
-                                    FoeAttendanceDataModel foeAttendanceDataModel = new FoeAttendanceDataModel("",jo.getString("name"),jo.getString("user_name"),"0",
-                                            "0","0","0","0","0","0","0","0","0");
-                                    dataList.add(foeAttendanceDataModel);
+                                    if(!jsonArray.getJSONObject(i).getString("designation_name").equals("FOE")) continue;
+                                    f = (jsonArray.getJSONObject(i).getString("name"));
+                                    fid = (jsonArray.getJSONObject(i).getString("id"));
+
+                                    // adding to the list to show in dialog box with the count
+                                    foeList.add(f);
+
+
+                                    // mapping id to index serial of the retail
+                                    foeIdMap.put(index++,fid);
                                 }
-                                mAdapter.notifyDataSetChanged();
                                 getDetails();
                             }
                             else
                             {
-                                CustomUtility.showError(ActivityAttendanceByFoe.this,message,"Failed");
+                                CustomUtility.showError(ActivityFoeDailyAttendance.this,message,"Failed");
                             }
 
                         } catch (JSONException e) {
-                            CustomUtility.showError(ActivityAttendanceByFoe.this, "Failed to get data", "Failed");
+                            CustomUtility.showError(ActivityFoeDailyAttendance.this, "Failed to get data", "Failed");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                pDialog = new SweetAlertDialog(ActivityAttendanceByFoe.this, SweetAlertDialog.ERROR_TYPE);
+                pDialog = new SweetAlertDialog(ActivityFoeDailyAttendance.this, SweetAlertDialog.ERROR_TYPE);
                 pDialog.setTitleText("Network Error");
                 pDialog.setConfirmText("Ok");
                 pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -281,16 +332,20 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
             }
         };
 
-        MySingleton.getInstance(ActivityAttendanceByFoe.this).addToRequestQue(stringRequest);
+        MySingleton.getInstance(ActivityFoeDailyAttendance.this).addToRequestQue(stringRequest);
     }
 
 
     public void getDetails() {
 
-        networkAvailable = CustomUtility.haveNetworkConnection(ActivityAttendanceByFoe.this);
+        dataList.clear();
+
+
+
+        networkAvailable = CustomUtility.haveNetworkConnection(ActivityFoeDailyAttendance.this);
         if(networkAvailable)
         {
-            progressDialog = new SweetAlertDialog(ActivityAttendanceByFoe.this, SweetAlertDialog.PROGRESS_TYPE);
+            progressDialog = new SweetAlertDialog(ActivityFoeDailyAttendance.this, SweetAlertDialog.PROGRESS_TYPE);
             progressDialog.setTitle("Please wait...");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -307,57 +362,42 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
                                 jsonObject = new JSONObject(response);
                                 String code = jsonObject.getString("success");
                                 String message = jsonObject.getString("message");
-                                String foeId,present, dayoff, late, casual, sick, halfday, absent, meeting = "0", training ;
+                                String present, dayoff, late, casual, sick, halfday, absent, meeting = "0", training ;
                                 int total_leave, total, total_present;
                                 if (code.equals("true")) {
                                     jsonArray = jsonObject.getJSONArray("resultList");
                                     for (int i = 0; i< jsonArray.length(); i++)
                                     {
                                         jo = jsonArray.getJSONObject(i);
+                                        present = jo.getString("total_present");
+                                        dayoff = jo.getString("total_dayOff");
+                                        late = jo.getString("total_late");
+                                        casual = jo.getString("total_casulLeave");
+                                        sick = jo.getString("total_sickLeave");
+                                        halfday = jo.getString("total_halfDayLeave");
+                                        absent = jo.getString("total_absent");
+                                        meeting = jo.getString("total_meeting");
+                                        training = jo.getString("total_training");
 
-                                        foeId = jo.getString("secId");     // here using secId for getting the foeId
-                                        for(int j = 0; j<dataList.size();j++)
-                                        {
-                                            if(foeId.equals(dataList.get(j).getFoeId()))
-                                            {
-                                                Log.e("found","match");
-                                                present = jo.getString("total_present");
-                                                dayoff = jo.getString("total_dayOff");
-                                                late = jo.getString("total_late");
-                                                casual = jo.getString("total_casulLeave");
-                                                sick = jo.getString("total_sickLeave");
-                                                halfday = jo.getString("total_halfDayLeave");
-                                                absent = jo.getString("total_absent");
-                                                meeting = jo.getString("total_meeting");
-                                                training = jo.getString("total_training");
-
-                                                total_present = Integer.parseInt(present) + Integer.parseInt(late);
-                                                total_leave = Integer.parseInt(casual) + Integer.parseInt(sick) + Integer.parseInt(halfday);
-                                                total = total_present + Integer.parseInt(dayoff) + Integer.parseInt(absent) + Integer.parseInt(meeting) + Integer.parseInt(training);
-                                                dataList.get(j).setPresent(String.valueOf(total_present));
-                                                dataList.get(j).setDayOff(dayoff);
-                                                dataList.get(j).setTraining(training);
-                                                dataList.get(j).setCasualLeave(casual);
-                                                dataList.get(j).setSickLeave(sick);
-                                                dataList.get(j).setHalfDayLeave(halfday);
-                                                dataList.get(j).setLeaveTotal(String.valueOf(total_leave));
-                                                dataList.get(j).setAbsent(absent);
-                                                dataList.get(j).setTotal(String.valueOf(total));
-                                                mAdapter.notifyItemChanged(j);
-                                            }
-                                        }
+                                        total_present = Integer.parseInt(present) + Integer.parseInt(late);
+                                        total_leave = Integer.parseInt(casual) + Integer.parseInt(sick) + Integer.parseInt(halfday);
+                                        total = total_present + Integer.parseInt(dayoff) + Integer.parseInt(absent) + Integer.parseInt(meeting) + Integer.parseInt(training);
+                                        FoeAttendanceDataModel foeAttendanceDataModel = new FoeAttendanceDataModel(jo.getString("date"),"",""
+                                                ,String.valueOf(total_present),dayoff,training,casual,sick,halfday,String.valueOf(total_leave),meeting,absent,String.valueOf(total));
+                                        dataList.add(foeAttendanceDataModel);
+                                        mAdapter.notifyDataSetChanged();
                                     }
 
                                 }
                                 else{
                                     Log.e("mess",message);
-                                    CustomUtility.showError(ActivityAttendanceByFoe.this,message,"Failed");
+                                    CustomUtility.showError(ActivityFoeDailyAttendance.this,message,"Failed");
                                     mAdapter.notifyDataSetChanged();
                                     return;
                                 }
 
                             } catch (JSONException e) {
-                                CustomUtility.showAlert(ActivityAttendanceByFoe.this,
+                                CustomUtility.showAlert(ActivityFoeDailyAttendance.this,
                                         e.getMessage() +". Parsing Failed..",
                                         "Response");
                             }
@@ -367,7 +407,7 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     progressDialog.dismiss();
                     Log.e("res",error.toString());
-                    CustomUtility.showError(ActivityAttendanceByFoe.this, "Network Error, try again!", "Failed");
+                    CustomUtility.showError(ActivityFoeDailyAttendance.this, "Network Error, try again!", "Failed");
                 }
             }) {
                 @Override
@@ -376,17 +416,17 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
                     params.put("UserId",sharedPreferences.getString("id",null));
                     params.put("DateStart",fromDate);
                     params.put("DateEnd",toDate);
-                    params.put("IsGroupByFoe","1");
+                    params.put("FoeId",foeId);
                     return params;
                 }
             };
 
-            MySingleton.getInstance(ActivityAttendanceByFoe.this).addToRequestQue(stringRequest);
+            MySingleton.getInstance(ActivityFoeDailyAttendance.this).addToRequestQue(stringRequest);
 
         }
         else
         {
-            CustomUtility.showWarning(ActivityAttendanceByFoe.this,"Please turn on internet connection","No Internet");
+            CustomUtility.showWarning(ActivityFoeDailyAttendance.this,"Please turn on internet connection","No Internet");
         }
     }
 
@@ -405,14 +445,14 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
         @Override
         public DataAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.attendance_by_foe_row_layout, parent, false);
+                    .inflate(R.layout.foe_daily_attendance_row_layout, parent, false);
             return new DataAdapter.MyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull DataAdapter.MyViewHolder holder, int position) {
             final FoeAttendanceDataModel data = dataList.get(position);
-            holder.foe.setText(data.getFoe());
+            holder.date.setText(data.getDate());
             holder.present.setText(data.getPresent());
             holder.dayOff.setText(data.getDayOff());
             holder.casualLeave.setText(data.getCasualLeave());
@@ -431,12 +471,12 @@ public class ActivityAttendanceByFoe extends AppCompatActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView foe, present, dayOff, training, casualLeave, sickLeave, halfDayLeave, totalLeave, meeting, absent, total;
+            TextView date, present, dayOff, training, casualLeave, sickLeave, halfDayLeave, totalLeave, meeting, absent, total;
 
             public MyViewHolder(View convertView) {
                 super(convertView);
 
-                foe = convertView.findViewById(R.id.foe);
+                date = convertView.findViewById(R.id.date);
                 present = convertView.findViewById(R.id.present);
                 dayOff = convertView.findViewById(R.id.dayOff);
                 training = convertView.findViewById(R.id.training);

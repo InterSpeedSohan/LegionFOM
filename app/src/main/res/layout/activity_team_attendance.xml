@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background_color">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/top_bar_size"
+        android:background="@color/tittle_bar_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="@dimen/home_btn_size"
+            android:layout_height="@dimen/home_btn_size"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/home_btn"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="Team Attendance"
+            android:fontFamily="@font/arial"
+            android:textColor="@color/input_color"
+            android:textSize="@dimen/tittle_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.484" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/logo_width"
+            android:layout_height="@dimen/logo_height"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dateBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/light_green"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center"
+            android:text="Date"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/semi_tittle_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/frombtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateBtn">
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/constraintLayout31"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:fillViewport="true"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent">
+
+               <androidx.constraintlayout.widget.ConstraintLayout
+                   android:layout_width="wrap_content"
+                   android:layout_height="@dimen/small_box_height"
+                   android:background="@color/white"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent">
+
+                   <TextView
+                       android:id="@+id/id"
+                       android:layout_width="50dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginLeft="8dp"
+                       android:fontFamily="@font/arial"
+                       android:text="FOE ID"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toStartOf="parent"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <TextView
+                       android:id="@+id/name"
+                       android:layout_width="150dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginLeft="8dp"
+                       android:fontFamily="@font/arial"
+                       android:text="Name"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/id"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <TextView
+                       android:id="@+id/territory"
+                       android:layout_width="150dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginLeft="8dp"
+                       android:fontFamily="@font/arial"
+                       android:text="Territory"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/name"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <TextView
+                       android:id="@+id/image"
+                       android:layout_width="70dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginLeft="8dp"
+                       android:text="Image"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/territory"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <TextView
+                       android:id="@+id/status"
+                       android:layout_width="100dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="16dp"
+                       android:layout_marginLeft="16dp"
+                       android:fontFamily="@font/arial"
+                       android:text="Status"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/image"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <TextView
+                       android:id="@+id/time"
+                       android:layout_width="100dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginLeft="8dp"
+                       android:fontFamily="@font/arial"
+                       android:text="Time"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/status"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <TextView
+                       android:id="@+id/gpsAccuracy"
+                       android:layout_width="100dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginLeft="8dp"
+                       android:fontFamily="@font/arial"
+                       android:text="GPS Accuracy"
+                       android:textColor="@color/black"
+                       android:textStyle="bold"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/time"
+                       app:layout_constraintTop_toTopOf="parent" />
+               </androidx.constraintlayout.widget.ConstraintLayout>
+
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+           <FrameLayout
+               android:layout_width="0dp"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/constraintLayout31">
+
+               <androidx.recyclerview.widget.RecyclerView
+                   android:id="@+id/recycler_view"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="5dp"
+                   android:scrollbars="vertical" />
+           </FrameLayout>
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </HorizontalScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,7 +40,12 @@ public class StatePanelActivity extends AppCompatActivity {
         });
 
 
-
+        foeDailyAttBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(StatePanelActivity.this, ActivityFoeDailyAttendance.class));
+            }
+        });
         attendanceByFoeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,21 +66,7 @@ public class StatePanelActivity extends AppCompatActivity {
                 startActivity(new Intent(StatePanelActivity.this,ActivityAttendanceBySec.class));
             }
         });
-/*
-        dailyCustomerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(StatePanelActivity.this,ActivityDailyCustomer.class));
-            }
-        });
 
-        customerBySecBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(StatePanelActivity.this, ActivityCustomerBySec.class));
-            }
-        });
-*/
         myAttendanceSumBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

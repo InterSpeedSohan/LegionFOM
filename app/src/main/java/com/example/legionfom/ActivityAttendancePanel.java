@@ -49,13 +49,13 @@ public class ActivityAttendancePanel extends AppCompatActivity {
                 }
             }
         });
-        /*
         teamAttendanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ActivityAttendancePanel.this,ActivityTeamAttendance.class));
             }
         });
+        /*
         evaluationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

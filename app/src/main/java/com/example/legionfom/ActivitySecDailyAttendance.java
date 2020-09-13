@@ -276,6 +276,7 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
                             message = jsonObject.getString("message");
                             if(code.equals("true"))
                             {
+                                int index = 0;
                                 jsonArray = jsonObject.getJSONArray("employeeList");
                                 for (int i = 0;i<jsonArray.length();i++)
                                 {
@@ -287,7 +288,7 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
                                     secList.add(s);
 
                                     // mapping id to index serial of the retail
-                                    secIdMap.put(i,sid);
+                                    secIdMap.put(index++,sid);
                                 }
                                 getDetails();
                             }
