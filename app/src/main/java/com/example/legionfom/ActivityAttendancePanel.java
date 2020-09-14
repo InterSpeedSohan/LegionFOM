@@ -55,21 +55,13 @@ public class ActivityAttendancePanel extends AppCompatActivity {
                 startActivity(new Intent(ActivityAttendancePanel.this,ActivityTeamAttendance.class));
             }
         });
-        /*
-        evaluationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ActivityAttendancePanel.this, SecEvaluationPanel.class));
-            }
-        });
+
         leaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ActivityAttendancePanel.this,ActivityLeaveAuthorization.class));
             }
         });
-
- */
     }
 
 

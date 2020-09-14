@@ -162,9 +162,13 @@ public class ActivityDockPanel extends AppCompatActivity {
                                         if (attendanceStatus.equals("Late")) {
                                             txtPresentStatus.setText(R.string.late);
                                             txtPresentStatus.setTextColor(Color.parseColor("#FF9800"));
-                                        } else {
+                                        } else if(attendanceStatus.equals("Present")) {
                                             txtPresentStatus.setText(R.string.present);
                                             txtPresentStatus.setTextColor(Color.parseColor("#00FF04"));
+                                        }
+                                        else{
+                                            txtPresentStatus.setText("You are on "+attendanceStatus);
+                                            txtPresentStatus.setTextColor(Color.parseColor("#FF9800"));
                                         }
 
                                     }

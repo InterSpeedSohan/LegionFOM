@@ -68,12 +68,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
+        <Button
+            android:id="@+id/stockByTerritory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_view_green"
+            android:fontFamily="@font/arial"
+            android:foreground="?selectableItemBackground"
+            android:text="Stock By Territories"
+            android:textAllCaps="false"
+            android:textSize="@dimen/semi_tittle_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <Button
             android:id="@+id/stockByRT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_view_green"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/text_view_orange"
             android:fontFamily="@font/arial"
             android:foreground="?selectableItemBackground"
             android:text="Stock By Retailers"
@@ -81,14 +96,14 @@
             android:textSize="@dimen/semi_tittle_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/stockByTerritory" />
 
         <Button
             android:id="@+id/stockByProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/text_view_orange"
+            android:background="@drawable/text_view_green"
             android:fontFamily="@font/arial"
             android:foreground="?selectableItemBackground"
             android:text="Stock By Products"

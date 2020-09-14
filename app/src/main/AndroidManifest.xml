@@ -45,6 +45,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ActivityTeamAttendance"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ActivityLeaveAuthorization"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
