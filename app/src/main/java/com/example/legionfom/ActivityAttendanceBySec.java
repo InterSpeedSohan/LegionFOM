@@ -360,7 +360,7 @@ public class ActivityAttendanceBySec extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
-                                CustomUtility.showAlert(ActivityAttendanceBySec.this,
+                                CustomUtility.showWarning(ActivityAttendanceBySec.this,
                                         e.getMessage() +". Parsing Failed..",
                                         "Response");
                             }

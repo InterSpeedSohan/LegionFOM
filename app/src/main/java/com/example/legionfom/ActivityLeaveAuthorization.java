@@ -155,7 +155,7 @@ public class ActivityLeaveAuthorization extends AppCompatActivity {
                             != PackageManager.PERMISSION_GRANTED) {
                         // Permission is not granted
                         Log.e("DXXXXXXXXXX", "Not Granted");
-                        CustomUtility.showAlert(ActivityLeaveAuthorization.this, "Permission not granted", "Permission");
+                        CustomUtility.showWarning(ActivityLeaveAuthorization.this, "Permission not granted", "Permission");
                     } else {
 
 

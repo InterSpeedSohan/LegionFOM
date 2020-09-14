@@ -393,7 +393,7 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
-                                CustomUtility.showAlert(ActivitySecDailyAttendance.this,
+                                CustomUtility.showWarning(ActivitySecDailyAttendance.this,
                                         e.getMessage() +". Parsing Failed..",
                                         "Response");
                             }

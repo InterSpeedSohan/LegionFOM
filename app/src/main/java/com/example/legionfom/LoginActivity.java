@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                         else {
-                            CustomUtility.showAlert(LoginActivity.this, "Please Check your internet connection","Network Warning !!!");
+                            CustomUtility.showWarning(LoginActivity.this, "Please Check your internet connection","Network Warning !!!");
                         }
                     }
                 }

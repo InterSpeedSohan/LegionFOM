@@ -47,6 +47,14 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ActivityLeaveAuthorization"
             android:screenOrientation="portrait"/>
+        <activity android:name=".StockByProductActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".StockByRtActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".StockByTerrActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ActivityDailySales"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

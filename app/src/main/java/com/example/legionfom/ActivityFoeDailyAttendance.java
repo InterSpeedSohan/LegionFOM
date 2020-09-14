@@ -397,7 +397,7 @@ public class ActivityFoeDailyAttendance extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
-                                CustomUtility.showAlert(ActivityFoeDailyAttendance.this,
+                                CustomUtility.showWarning(ActivityFoeDailyAttendance.this,
                                         e.getMessage() +". Parsing Failed..",
                                         "Response");
                             }

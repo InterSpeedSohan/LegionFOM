@@ -50,14 +50,7 @@ public class CustomUtility {
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
-    public static void showAlert(Context context,String message,String title)
-    {
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
-        builder.setMessage(message);
-        builder.setPositiveButton("Ok",null);
-        builder.setTitle(title );
-        builder.show();
-    }
+
 
     public static void showWarning(Context context, String mess, String tittle)
     {

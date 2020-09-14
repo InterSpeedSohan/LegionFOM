@@ -204,7 +204,7 @@ public class ActivityTeamAttendance extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
-                                CustomUtility.showAlert(ActivityTeamAttendance.this,
+                                CustomUtility.showWarning(ActivityTeamAttendance.this,
                                         e.getMessage() +". Parsing Failed..",
                                         "Response");
                             }
@@ -407,7 +407,7 @@ public class ActivityTeamAttendance extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
-                                CustomUtility.showAlert(ActivityTeamAttendance.this,
+                                CustomUtility.showWarning(ActivityTeamAttendance.this,
                                         e.getMessage() +". Parsing Failed..",
                                         "Response");
                             }

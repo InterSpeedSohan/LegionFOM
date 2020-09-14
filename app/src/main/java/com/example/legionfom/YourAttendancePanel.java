@@ -149,7 +149,7 @@ public class YourAttendancePanel extends AppCompatActivity {
                         photoFile = createImageFile();
                     } catch (IOException ex) {
                         // Error occurred while creating the File
-                        CustomUtility.showAlert(YourAttendancePanel.this, ex.getMessage(), "Creating Image");
+                        CustomUtility.showWarning(YourAttendancePanel.this, ex.getMessage(), "Creating Image");
                         return;
                     }
                     // Continue only if the File was successfully created
@@ -177,7 +177,7 @@ public class YourAttendancePanel extends AppCompatActivity {
                             != PackageManager.PERMISSION_GRANTED) {
                         // Permission is not granted
                         Log.e("DXXXXXXXXXX", "Not Granted");
-                        CustomUtility.showAlert(YourAttendancePanel.this, "Permission not granted", "Permission");
+                        CustomUtility.showWarning(YourAttendancePanel.this, "Permission not granted", "Permission");
                     } else {
                         SweetAlertDialog d = new SweetAlertDialog(YourAttendancePanel.this, SweetAlertDialog.WARNING_TYPE);
                         d.setTitleText("Confirm Submission?");
@@ -247,7 +247,7 @@ public class YourAttendancePanel extends AppCompatActivity {
         } catch (IOException e) {
             pDialog.dismiss();
             String err = e.getMessage() + " May be storage full please uninstall then install the app again";
-            CustomUtility.showAlert(this, e.getMessage(), "Problem Creating Bitmap at Submit");
+            CustomUtility.showWarning(this, e.getMessage(), "Problem Creating Bitmap at Submit");
             return;
         }
         imageString = CustomUtility.imageToString(bitmap);
@@ -329,7 +329,7 @@ public class YourAttendancePanel extends AppCompatActivity {
         try {
             image.createNewFile();
         } catch (IOException e) {
-            CustomUtility.showAlert(this, "Image Creation Failed. Please contact administrator", "Error");
+            CustomUtility.showWarning(this, "Image Creation Failed. Please contact administrator", "Error");
         }
         currentPhotoPath = image.getAbsolutePath();
         Log.e("image path",currentPhotoPath);
