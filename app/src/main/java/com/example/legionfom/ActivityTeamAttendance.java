@@ -270,14 +270,17 @@ public class ActivityTeamAttendance extends AppCompatActivity {
             if(data.getStatus().equals("Present"))
             {
                 holder.status.setTextColor(Color.parseColor("#148026"));
+                holder.rowLayout.setBackgroundResource(R.color.even);
             }
             else if (data.getStatus().equals("Absent"))
             {
                 holder.status.setTextColor(Color.parseColor("#E33109"));
+                holder.rowLayout.setBackgroundResource(R.color.light_red);
             }
             else if(data.getStatus().equals("Late"))
             {
                 holder.status.setTextColor(Color.parseColor("#FF9800"));
+                holder.rowLayout.setBackgroundResource(R.color.even);
             }
             holder.time.setText(data.getTime());
             holder.gps.setText(data.getGps());
@@ -307,14 +310,7 @@ public class ActivityTeamAttendance extends AppCompatActivity {
 
                 }
             });
-            if(position%2 == 0)
-            {
-                holder.rowLayout.setBackgroundResource(R.color.even);
-            }
-            else
-            {
-                holder.rowLayout.setBackgroundResource(R.color.odd);
-            }
+
         }
 
         @Override

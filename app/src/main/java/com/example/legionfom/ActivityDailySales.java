@@ -698,7 +698,11 @@ public class ActivityDailySales extends AppCompatActivity {
             holder.date.setText(data.getDate());
             holder.saleVolume.setText(data.getSaleVolume());
             holder.saleValue.setText(data.getSaleValue());
-            if((position == dataList.size()-1))
+            if(Integer.parseInt(data.getSaleVolume())<=0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.light_red);
+            }
+            else if((position == dataList.size()-1))
             {
                 holder.rowLayout.setBackgroundResource(R.color.white);
             }

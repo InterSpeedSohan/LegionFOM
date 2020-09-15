@@ -428,13 +428,24 @@ public class ActivityAttendanceBySec extends AppCompatActivity {
             holder.rtClose.setText(data.getRtClose());
             holder.absent.setText(data.getAbsent());
             holder.total.setText(data.getTotal());
-            if(position%2 == 0)
+            if(Integer.parseInt(data.getTotal())<=0)
             {
-                holder.rowLayout.setBackgroundResource(R.color.even);
+                holder.rowLayout.setBackgroundResource(R.color.light_red);
+            }
+            else  if((position == dataList.size()-1))
+            {
+                holder.rowLayout.setBackgroundResource(R.color.white);
             }
             else
             {
-                holder.rowLayout.setBackgroundResource(R.color.odd);
+                if(position%2 == 0)
+                {
+                    holder.rowLayout.setBackgroundResource(R.color.even);
+                }
+                else
+                {
+                    holder.rowLayout.setBackgroundResource(R.color.odd);
+                }
             }
         }
 
