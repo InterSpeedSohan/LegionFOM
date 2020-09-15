@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout56"
+        android:id="@+id/rowLayout"
         android:layout_width="0dp"
         android:layout_height="@dimen/small_box_height"
         android:layout_marginTop="8dp"

@@ -55,6 +55,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ActivityDailySales"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ActivitySalesByRT"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ActivitySalesByTerritory"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ActivitySalesByProduct"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

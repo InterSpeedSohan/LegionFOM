@@ -1,5 +1,7 @@
 package com.example.legionfom;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -27,8 +29,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.legionfom.dataModel.StockShowByRTDataModel;
-import com.example.legionfom.dataModel.StockShowByTerrDataModel;
+import com.example.legionfom.dataModel.SalesByRTDataModel;
+import com.example.legionfom.dataModel.SalesByTerrDataModel;
 import com.example.legionfom.helper.CustomUtility;
 import com.example.legionfom.helper.MySingleton;
 
@@ -36,59 +38,71 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class StockByTerrActivity extends AppCompatActivity {
+public class ActivitySalesByTerritory extends AppCompatActivity {
 
-    ImageButton homeBtn;
-    Button productBtn, delBtn;
     RecyclerView recyclerView;
     DataAdapter mAdapter;
-    private List<StockShowByTerrDataModel> dataList = new ArrayList<>();
+    private ArrayList<SalesByTerrDataModel> dataList = new ArrayList<SalesByTerrDataModel>();
 
+    ImageButton homeBtn;
 
+    Button modelBtn, delModelBtn;
+
+    public static String code = "", message = "";
+
+    TextView txtFromdate, txtTodate;
+    Button fromBtn, toBtn;
+
+    String toDate="", fromDate="";
+
+    final Calendar myCalendar = Calendar.getInstance();
+    final Calendar myCalendar2 = Calendar.getInstance();
+    String myFormat = "yyyy-MM-dd";
+    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
     SweetAlertDialog sweetAlertDialog,progressDialog,pDialog;
     JSONObject jsonObject;
     JSONArray jsonArray;
     JSONObject jo;
-
+    String Json_String;
     boolean networkAvailable = false;
 
-    String message = "", code = "";
+    SharedPreferences sharedPreferences;
+
     String modelName = "", modelId = "";
     ArrayAdapter<String> arrayAdapter;
     ArrayList modelList = new ArrayList<String>();
     Map<Integer,String> modelIdMap = new HashMap<>();
     String  m, mid;
 
-    SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stock_by_territory);
+        setContentView(R.layout.activity_sales_by_territory);
+
         sharedPreferences = getSharedPreferences("fom_user",MODE_PRIVATE);
 
         homeBtn = findViewById(R.id.homeBtn);
-        productBtn = findViewById(R.id.productBtn);
-        delBtn = findViewById(R.id.delBtn);
 
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        modelBtn = findViewById(R.id.modelBtn);
+        delModelBtn = findViewById(R.id.delModelBtn);
 
+        txtFromdate = findViewById(R.id.fromdate);
+        txtTodate = findViewById(R.id.todate);
+        fromBtn = findViewById(R.id.frombtn);
+        toBtn = findViewById(R.id.tobtn);
 
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         mAdapter = new DataAdapter(dataList);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
@@ -100,53 +114,152 @@ public class StockByTerrActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        getProductList();
 
-        delBtn.setOnClickListener(new View.OnClickListener() {
+        getModelList();
+
+
+        // making from date as first date of current month
+        myCalendar.set(Calendar.DAY_OF_MONTH,1);
+        fromDate = sdf.format(myCalendar.getTime());
+        txtFromdate.setText(fromDate);
+        toDate = sdf.format(myCalendar2.getTime());
+        txtTodate.setText(toDate);
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+        delModelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 modelId = "";
+                modelBtn.setText("Select model");
                 modelName = "";
-                productBtn.setText("Select model");
                 getDetails();
             }
         });
 
-        productBtn.setOnClickListener(new View.OnClickListener() {
+
+        modelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(StockByTerrActivity.this);
-                builderSingle.setIcon(R.drawable.logo);
-                builderSingle.setTitle("Select model");
-                arrayAdapter = new ArrayAdapter<String>(StockByTerrActivity.this, R.layout.custom_list_item,modelList);
+                AlertDialog.Builder modelDialog = new AlertDialog.Builder(ActivitySalesByTerritory.this);
+                modelDialog.setIcon(R.drawable.logo);
+                modelDialog.setTitle("Select a model");
+                arrayAdapter = new ArrayAdapter<>(ActivitySalesByTerritory.this, R.layout.custom_list_item, modelList);
 
-                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                modelDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
 
-                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                modelDialog.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         modelName = arrayAdapter.getItem(which);
                         modelId = modelIdMap.get(which);
-                        productBtn.setText(modelName);
+                        modelBtn.setText(modelName);
                         getDetails();
                     }
                 });
-                builderSingle.show();
+                modelDialog.show();
+            }
+        });
+
+
+
+        final DatePickerDialog.OnDateSetListener fromdate = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateFromDate();
+                getDetails();
+            }
+
+        };
+
+        fromBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(ActivitySalesByTerritory.this, fromdate, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+
+        final DatePickerDialog.OnDateSetListener todate = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar2.set(Calendar.YEAR, year);
+                myCalendar2.set(Calendar.MONTH, monthOfYear);
+                myCalendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                if(myCalendar.compareTo(myCalendar2) == 1)
+                {
+                    txtTodate.setText("");
+                    CustomUtility.showWarning(ActivitySalesByTerritory.this,"Select correct date","Failed");
+                }
+                else{
+                    updateToDate();
+
+                    networkAvailable = CustomUtility.haveNetworkConnection(ActivitySalesByTerritory.this);
+                    if (networkAvailable) getDetails();
+                    else CustomUtility.showWarning(ActivitySalesByTerritory.this,"Please turn on internet connection","No inernet");
+                }
+
+            }
+
+        };
+
+        toBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fromDate.equals(""))
+                {
+                    CustomUtility.showWarning(ActivitySalesByTerritory.this,"Select from date first","Failed");
+                }
+                else
+                {
+                    new DatePickerDialog(ActivitySalesByTerritory.this, todate, myCalendar2
+                            .get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
+                            myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
+                }
+
             }
         });
     }
 
-    // for getting all product list
-    private void getProductList() {
+
+    private void updateFromDate() {
+        fromDate = sdf.format(myCalendar.getTime());
+        txtFromdate.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    private void updateToDate() {
+        toDate = sdf.format(myCalendar2.getTime());
+        txtTodate.setText(sdf.format(myCalendar2.getTime()));
+    }
 
 
-        progressDialog = new SweetAlertDialog(StockByTerrActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-        progressDialog.setTitle("Please wait...");
+
+    public void getModelList()
+    {
+        progressDialog = new SweetAlertDialog(ActivitySalesByTerritory.this, SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog.setTitle("Please wait....");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
@@ -180,18 +293,18 @@ public class StockByTerrActivity extends AppCompatActivity {
                             }
                             else
                             {
-                                CustomUtility.showError(StockByTerrActivity.this,message,"Failed");
+                                CustomUtility.showError(ActivitySalesByTerritory.this,message,"Failed");
                             }
 
                         } catch (JSONException e) {
-                            CustomUtility.showError(StockByTerrActivity.this, "Failed to get data", "Failed");
+                            CustomUtility.showError(ActivitySalesByTerritory.this, "Failed to get data", "Failed");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                pDialog = new SweetAlertDialog(StockByTerrActivity.this, SweetAlertDialog.ERROR_TYPE);
+                pDialog = new SweetAlertDialog(ActivitySalesByTerritory.this, SweetAlertDialog.ERROR_TYPE);
                 pDialog.setTitleText("Network Error");
                 pDialog.setConfirmText("Ok");
                 pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -214,18 +327,21 @@ public class StockByTerrActivity extends AppCompatActivity {
             }
         };
 
-        MySingleton.getInstance(StockByTerrActivity.this).addToRequestQue(stringRequest);
-
+        MySingleton.getInstance(ActivitySalesByTerritory.this).addToRequestQue(stringRequest);
     }
 
-    public void getDetails()
-    {
+
+
+
+    public void getDetails() {
+
         dataList.clear();
 
-        sweetAlertDialog = new SweetAlertDialog(StockByTerrActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        sweetAlertDialog = new SweetAlertDialog(ActivitySalesByTerritory.this, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.setTitleText("Loading");
         sweetAlertDialog.show();
-        String upLoadServerUri = "https://sec.imslpro.com/api/android/get_stock_group_summary.php";
+        String upLoadServerUri = "https://sec.imslpro.com/api/android/get_sales_group_summary.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, upLoadServerUri,
                 new Response.Listener<String>() {
                     @Override
@@ -234,37 +350,40 @@ public class StockByTerrActivity extends AppCompatActivity {
                             sweetAlertDialog.dismiss();
                             Log.e("response",response);
                             jsonObject = new JSONObject(response);
-                            String code = jsonObject.getString("success");
-                            String message = jsonObject.getString("message");
-                            StockShowByTerrDataModel stockShowByTerrDataModel;
-                            Integer quantity=0, amount = 0;
+                            SalesByTerrDataModel salesByTerrDataModel;
+                            Integer trgtQuantity=0, saleQuantity=0, trgtAmount=0, saleAmount=0;
+                            code = jsonObject.getString("success");
+                            message = jsonObject.getString("message");
                             if (code.equals("true")) {
                                 int sum = 0;
                                 int total = 0;
-                                jsonArray = jsonObject.getJSONArray("stockResult");
+                                jsonArray = jsonObject.getJSONArray("saleResult");
                                 for (int i = 0; i< jsonArray.length(); i++)
                                 {
                                     jo = jsonArray.getJSONObject(i);
-                                    quantity += Integer.parseInt(jo.getString("total_quantity"));
-                                    amount += Integer.parseInt(jo.getString("total_amount"));
-                                    stockShowByTerrDataModel = new StockShowByTerrDataModel(jo.getString("name"),
-                                            jo.getString("total_quantity"),jo.getString("total_amount"));
-                                    dataList.add(stockShowByTerrDataModel);
-                                    mAdapter.notifyDataSetChanged();
+                                    trgtQuantity += Integer.parseInt(jo.getString("target_quantity"));
+                                    saleQuantity += Integer.parseInt(jo.getString("sale_quantity"));
+                                    trgtAmount += Integer.parseInt(jo.getString("target_amount"));
+                                    saleAmount += Integer.parseInt(jo.getString("sale_amount"));
+                                    salesByTerrDataModel = new SalesByTerrDataModel(jo.getString("name"),jo.getString("target_quantity"),
+                                            jo.getString("sale_quantity"),jo.getString("target_amount"),jo.getString("sale_amount"));
+                                    dataList.add(salesByTerrDataModel);
+
                                 }
-                                stockShowByTerrDataModel = new StockShowByTerrDataModel("Total("+String.valueOf(dataList.size())+")",
-                                        String.valueOf(quantity),String.valueOf(amount));
-                                dataList.add(stockShowByTerrDataModel);
+                                salesByTerrDataModel = new SalesByTerrDataModel("Total("+String.valueOf(dataList.size())+")",String.valueOf(trgtQuantity),
+                                        String.valueOf(saleQuantity),String.valueOf(trgtAmount),String.valueOf(saleAmount));
+                                dataList.add(salesByTerrDataModel);
+                                mAdapter.notifyDataSetChanged();
                             }
                             else{
                                 Log.e("mess",message);
-                                CustomUtility.showError(StockByTerrActivity.this,message,"Failed");
+                                CustomUtility.showError(ActivitySalesByTerritory.this,message,"Failed");
                                 dataList.clear();
                                 mAdapter.notifyDataSetChanged();
                                 return;
                             }
                         } catch (JSONException e) {
-                            CustomUtility.showError(StockByTerrActivity.this, e.getMessage(), "Getting Response");
+                            CustomUtility.showError(ActivitySalesByTerritory.this, e.getMessage(), "Getting Response");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -272,7 +391,7 @@ public class StockByTerrActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 sweetAlertDialog.dismiss();
                 Log.e("res",error.toString());
-                CustomUtility.showError(StockByTerrActivity.this, "Network Error, try again!", "Failed");
+                CustomUtility.showError(ActivitySalesByTerritory.this, "Network Error, try again!", "Failed");
             }
         }) {
             @Override
@@ -281,12 +400,13 @@ public class StockByTerrActivity extends AppCompatActivity {
                 params.put("UserId",sharedPreferences.getString("id",null));
                 params.put("ProductId",modelId);
                 params.put("GroupStyle","territory");
+                params.put("DateStart",fromDate);
+                params.put("DateEnd",toDate);
                 return params;
             }
         };
 
-        MySingleton.getInstance(StockByTerrActivity.this).addToRequestQue(stringRequest);
-
+        MySingleton.getInstance(ActivitySalesByTerritory.this).addToRequestQue(stringRequest);
 
     }
 
@@ -295,9 +415,9 @@ public class StockByTerrActivity extends AppCompatActivity {
     // data adapter class for showing the list
     public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
 
-        private List<StockShowByTerrDataModel> dataList;
+        private List<SalesByTerrDataModel> dataList;
 
-        public DataAdapter(List<StockShowByTerrDataModel> dataList) {
+        public DataAdapter(List<SalesByTerrDataModel> dataList) {
             this.dataList = dataList;
         }
 
@@ -305,18 +425,19 @@ public class StockByTerrActivity extends AppCompatActivity {
         @Override
         public DataAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.stock_showing_by_territory_row, parent, false);
+                    .inflate(R.layout.sales_by_territory_row_layout, parent, false);
             return new DataAdapter.MyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull DataAdapter.MyViewHolder holder, int position) {
-            final StockShowByTerrDataModel data = dataList.get(position);
-
+            SalesByTerrDataModel data = dataList.get(position);
             holder.territory.setText(data.getTerritory());
-            holder.volume.setText(data.getVolume());
-            holder.value.setText(data.getValue());
-            if(Integer.parseInt(data.getVolume())<=0)
+            holder.tgtVolume.setText(data.getTgtVolume());
+            holder.achVolume.setText(data.getAchVolume());
+            holder.tgtValue.setText(data.getTgtValue());
+            holder.achValue.setText(data.getAchValue());
+            if(Integer.parseInt(data.getAchVolume())<=0)
             {
                 holder.rowLayout.setBackgroundResource(R.color.light_red);
             }
@@ -343,18 +464,19 @@ public class StockByTerrActivity extends AppCompatActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView territory, volume, value;
+            TextView territory, tgtVolume, achVolume, tgtValue, achValue;
             ConstraintLayout rowLayout;
+
             public MyViewHolder(View convertView) {
                 super(convertView);
                 rowLayout = convertView.findViewById(R.id.rowLayout);
                 territory =  convertView.findViewById(R.id.territory);
-                volume = convertView.findViewById(R.id.volume);
-                value = convertView.findViewById(R.id.value);
-
+                tgtVolume =  convertView.findViewById(R.id.trgtVolume);
+                achVolume = convertView.findViewById(R.id.achVolume);
+                tgtValue = convertView.findViewById(R.id.trgtValue);
+                achValue = convertView.findViewById(R.id.achValue);
             }
         }
     }
-
 
 }

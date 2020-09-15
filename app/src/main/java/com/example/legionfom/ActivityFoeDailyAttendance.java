@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -362,7 +363,9 @@ public class ActivityFoeDailyAttendance extends AppCompatActivity {
                                 jsonObject = new JSONObject(response);
                                 String code = jsonObject.getString("success");
                                 String message = jsonObject.getString("message");
+                                FoeAttendanceDataModel foeAttendanceDataModel;
                                 String present, dayoff, late, casual, sick, halfday, absent, meeting = "0", training ;
+                                Integer ttlpresent=0, total_dayOff=0, total_casulLeave=0, total_sickLeave=0, total_halfDayLeave=0, total_absent=0, total_meeting=0, total_training=0,ttl_leave = 0,ttl_ttl = 0;
                                 int total_leave, total, total_present;
                                 if (code.equals("true")) {
                                     jsonArray = jsonObject.getJSONArray("resultList");
@@ -382,12 +385,28 @@ public class ActivityFoeDailyAttendance extends AppCompatActivity {
                                         total_present = Integer.parseInt(present) + Integer.parseInt(late);
                                         total_leave = Integer.parseInt(casual) + Integer.parseInt(sick) + Integer.parseInt(halfday);
                                         total = total_present + Integer.parseInt(dayoff) + Integer.parseInt(absent) + Integer.parseInt(meeting) + Integer.parseInt(training);
-                                        FoeAttendanceDataModel foeAttendanceDataModel = new FoeAttendanceDataModel(jo.getString("date"),"",""
+
+                                        ttlpresent += (total_present);
+                                        total_dayOff += Integer.parseInt(dayoff);
+                                        total_casulLeave += Integer.parseInt(casual);
+                                        total_sickLeave += Integer.parseInt(sick);
+                                        total_halfDayLeave += Integer.parseInt(halfday);
+                                        total_absent += Integer.parseInt(absent);
+                                        total_meeting += Integer.parseInt(meeting);
+                                        total_training += Integer.parseInt(training);
+                                        ttl_leave += total_leave;
+                                        ttl_ttl += total;
+
+                                        foeAttendanceDataModel = new FoeAttendanceDataModel(jo.getString("date"),"",""
                                                 ,String.valueOf(total_present),dayoff,training,casual,sick,halfday,String.valueOf(total_leave),meeting,absent,String.valueOf(total));
                                         dataList.add(foeAttendanceDataModel);
-                                        mAdapter.notifyDataSetChanged();
                                     }
-
+                                    foeAttendanceDataModel = new FoeAttendanceDataModel("Total("+String.valueOf(dataList.size())+")","",""
+                                            ,String.valueOf(ttlpresent),String.valueOf(total_dayOff),String.valueOf(total_training),
+                                            String.valueOf(total_casulLeave),String.valueOf(total_casulLeave),String.valueOf(total_halfDayLeave),String.valueOf(ttl_leave),String.valueOf(total_meeting),
+                                            String.valueOf(total_absent),String.valueOf(ttl_ttl));
+                                    dataList.add(foeAttendanceDataModel);
+                                    mAdapter.notifyDataSetChanged();
                                 }
                                 else{
                                     Log.e("mess",message);
@@ -463,6 +482,14 @@ public class ActivityFoeDailyAttendance extends AppCompatActivity {
             holder.meeting.setText(data.getMeeting());
             holder.absent.setText(data.getAbsent());
             holder.total.setText(data.getTotal());
+            if(position%2 == 0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.even);
+            }
+            else
+            {
+                holder.rowLayout.setBackgroundResource(R.color.odd);
+            }
         }
 
         @Override
@@ -472,10 +499,10 @@ public class ActivityFoeDailyAttendance extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView date, present, dayOff, training, casualLeave, sickLeave, halfDayLeave, totalLeave, meeting, absent, total;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 date = convertView.findViewById(R.id.date);
                 present = convertView.findViewById(R.id.present);
                 dayOff = convertView.findViewById(R.id.dayOff);

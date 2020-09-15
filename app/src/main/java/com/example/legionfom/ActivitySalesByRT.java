@@ -29,7 +29,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.legionfom.dataModel.DailySalesDataModel;
+import com.example.legionfom.dataModel.SalesByRTDataModel;
 import com.example.legionfom.helper.CustomUtility;
 import com.example.legionfom.helper.MySingleton;
 
@@ -47,15 +47,15 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class ActivityDailySales extends AppCompatActivity {
+public class ActivitySalesByRT extends AppCompatActivity {
 
     RecyclerView recyclerView;
     DataAdapter mAdapter;
-    private ArrayList<DailySalesDataModel> dataList = new ArrayList<DailySalesDataModel>();
+    private ArrayList<SalesByRTDataModel> dataList = new ArrayList<SalesByRTDataModel>();
 
     ImageButton homeBtn;
 
-    Button retailBtn, modelBtn, delRetailBtn, delModelBtn, territoryBtn, delTerritoryBtn;
+    Button modelBtn, delModelBtn, territoryBtn, delTerritoryBtn;
 
     public static String code = "", message = "";
 
@@ -78,44 +78,33 @@ public class ActivityDailySales extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-    String modelName = "", modelId = "", retailName = "", retailId = "", territoryName = "", territoryId = "";
+    String modelName = "", modelId = "", territoryName = "", territoryId = "";
     ArrayAdapter<String> arrayAdapter;
     ArrayAdapter<String> arrayAdapter1;
-    ArrayAdapter<String> arrayAdapter2;
-    ArrayList retailList = new ArrayList<String>();
     ArrayList modelList = new ArrayList<String>();
     ArrayList territoryList = new ArrayList<String>();
     Map<Integer,String> territoryMap = new HashMap<>();
-    Map<Integer,String> retailIdMap = new HashMap<>();
     Map<Integer,String> modelIdMap = new HashMap<>();
-    Map<Integer,String> retailTerritoryMap = new HashMap<>();
-    String  r, rid, m, mid,t,tid;
-
-    TextView txtTotalVal, txtTotalVol;
+    String  m, mid,t,tid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_daily_sales_report);
+        setContentView(R.layout.activity_sales_by_retailers);
 
         sharedPreferences = getSharedPreferences("fom_user",MODE_PRIVATE);
 
         homeBtn = findViewById(R.id.homeBtn);
 
-        retailBtn = findViewById(R.id.retailBtn);
         modelBtn = findViewById(R.id.modelBtn);
         delModelBtn = findViewById(R.id.delModelBtn);
-        delRetailBtn = findViewById(R.id.delRetailBtn);
         territoryBtn = findViewById(R.id.territoryBtn);
         delTerritoryBtn = findViewById(R.id.delTerritoryBtn);
-
-
 
         txtFromdate = findViewById(R.id.fromdate);
         txtTodate = findViewById(R.id.todate);
         fromBtn = findViewById(R.id.frombtn);
         toBtn = findViewById(R.id.tobtn);
-
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         mAdapter = new DataAdapter(dataList);
@@ -130,12 +119,8 @@ public class ActivityDailySales extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
 
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        getModelList();
+
 
         // making from date as first date of current month
         myCalendar.set(Calendar.DAY_OF_MONTH,1);
@@ -144,15 +129,13 @@ public class ActivityDailySales extends AppCompatActivity {
         toDate = sdf.format(myCalendar2.getTime());
         txtTodate.setText(toDate);
 
-
-        delRetailBtn.setOnClickListener(new View.OnClickListener() {
+        homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetRetailSelect();
-                if(!toDate.equals(""))
-                    getDetails();
+                finish();
             }
         });
+
 
         delModelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,85 +143,38 @@ public class ActivityDailySales extends AppCompatActivity {
                 modelId = "";
                 modelBtn.setText("Select model");
                 modelName = "";
-                if(!toDate.equals(""))
-                    getDetails();
+                getDetails();
             }
         });
 
-        //for getting the retail list
-        getRetailList();
 
-        retailBtn.setOnClickListener(new View.OnClickListener() {
+        modelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                androidx.appcompat.app.AlertDialog.Builder builderSingle = new androidx.appcompat.app.AlertDialog.Builder(ActivityDailySales.this);
-                builderSingle.setIcon(R.drawable.logo);
-                builderSingle.setTitle("Select retail");
-                arrayAdapter = new ArrayAdapter<String>(ActivityDailySales.this, R.layout.custom_list_item,retailList);
+                AlertDialog.Builder modelDialog = new AlertDialog.Builder(ActivitySalesByRT.this);
+                modelDialog.setIcon(R.drawable.logo);
+                modelDialog.setTitle("Select a model");
+                arrayAdapter = new ArrayAdapter<>(ActivitySalesByRT.this, R.layout.custom_list_item, modelList);
 
-                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                modelDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
 
-                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                modelDialog.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        tid = retailTerritoryMap.get(which);
-                        if(territoryId.equals("") | tid.equals(territoryId))
-                        {
-                            retailName = arrayAdapter.getItem(which);
-                            retailId = retailIdMap.get(which);
-                            retailBtn.setText(retailName);
-                            getDetails();
-                        }
-                        else
-                        {
-                            CustomUtility.showWarning(ActivityDailySales.this,"This retail is not under your selected territory","Selection Error");
-                        }
+                        modelName = arrayAdapter.getItem(which);
+                        modelId = modelIdMap.get(which);
+                        modelBtn.setText(modelName);
+                        getDetails();
                     }
                 });
-                builderSingle.show();
+                modelDialog.show();
             }
         });
-
-        modelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!toDate.equals(""))
-                {
-                    AlertDialog.Builder modelDialog = new AlertDialog.Builder(ActivityDailySales.this);
-                    modelDialog.setIcon(R.drawable.logo);
-                    modelDialog.setTitle("Select a model");
-                    arrayAdapter1 = new ArrayAdapter<>(ActivityDailySales.this, R.layout.custom_list_item, modelList);
-
-                    modelDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    modelDialog.setAdapter(arrayAdapter1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            modelName = arrayAdapter1.getItem(which);
-                            modelId = modelIdMap.get(which);
-                            modelBtn.setText(modelName);
-                            getDetails();
-                        }
-                    });
-                    modelDialog.show();
-                }
-                else
-                {
-                    CustomUtility.showWarning(ActivityDailySales.this,"Please select date range first","Required Fields");
-                }
-            }
-        });
-
 
         delTerritoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,10 +191,10 @@ public class ActivityDailySales extends AppCompatActivity {
         territoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                androidx.appcompat.app.AlertDialog.Builder builderSingle = new androidx.appcompat.app.AlertDialog.Builder(ActivityDailySales.this);
+                androidx.appcompat.app.AlertDialog.Builder builderSingle = new androidx.appcompat.app.AlertDialog.Builder(ActivitySalesByRT.this);
                 builderSingle.setIcon(R.drawable.logo);
                 builderSingle.setTitle("Select territory");
-                arrayAdapter2 = new ArrayAdapter<String>(ActivityDailySales.this, R.layout.custom_list_item,territoryList);
+                arrayAdapter1 = new ArrayAdapter<String>(ActivitySalesByRT.this, R.layout.custom_list_item,territoryList);
 
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -267,13 +203,12 @@ public class ActivityDailySales extends AppCompatActivity {
                     }
                 });
 
-                builderSingle.setAdapter(arrayAdapter2, new DialogInterface.OnClickListener() {
+                builderSingle.setAdapter(arrayAdapter1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        territoryName = arrayAdapter2.getItem(which);
+                        territoryName = arrayAdapter1.getItem(which);
                         territoryId = territoryMap.get(which);
                         territoryBtn.setText(territoryName);
-                        resetRetailSelect();
                         getDetails();
 
                     }
@@ -281,6 +216,7 @@ public class ActivityDailySales extends AppCompatActivity {
                 builderSingle.show();
             }
         });
+
 
         final DatePickerDialog.OnDateSetListener fromdate = new DatePickerDialog.OnDateSetListener() {
 
@@ -300,7 +236,7 @@ public class ActivityDailySales extends AppCompatActivity {
         fromBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(ActivityDailySales.this, fromdate, myCalendar
+                new DatePickerDialog(ActivitySalesByRT.this, fromdate, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -319,14 +255,14 @@ public class ActivityDailySales extends AppCompatActivity {
                 if(myCalendar.compareTo(myCalendar2) == 1)
                 {
                     txtTodate.setText("");
-                    CustomUtility.showWarning(ActivityDailySales.this,"Select correct date","Failed");
+                    CustomUtility.showWarning(ActivitySalesByRT.this,"Select correct date","Failed");
                 }
                 else{
                     updateToDate();
 
-                    networkAvailable = CustomUtility.haveNetworkConnection(ActivityDailySales.this);
+                    networkAvailable = CustomUtility.haveNetworkConnection(ActivitySalesByRT.this);
                     if (networkAvailable) getDetails();
-                    else CustomUtility.showWarning(ActivityDailySales.this,"Please turn on internet connection","No inernet");
+                    else CustomUtility.showWarning(ActivitySalesByRT.this,"Please turn on internet connection","No inernet");
                 }
 
             }
@@ -338,47 +274,40 @@ public class ActivityDailySales extends AppCompatActivity {
             public void onClick(View v) {
                 if(fromDate.equals(""))
                 {
-                    CustomUtility.showWarning(ActivityDailySales.this,"Select from date first","Failed");
+                    CustomUtility.showWarning(ActivitySalesByRT.this,"Select from date first","Failed");
                 }
                 else
                 {
-                    new DatePickerDialog(ActivityDailySales.this, todate, myCalendar2
+                    new DatePickerDialog(ActivitySalesByRT.this, todate, myCalendar2
                             .get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
                             myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
                 }
 
             }
         });
+
     }
 
-    private void resetRetailSelect()
-    {
-        retailId = "";
-        retailName = "";
-        retailBtn.setText("Select retail");
-    }
     private void updateFromDate() {
         fromDate = sdf.format(myCalendar.getTime());
         txtFromdate.setText(sdf.format(myCalendar.getTime()));
     }
 
     private void updateToDate() {
-
         toDate = sdf.format(myCalendar2.getTime());
         txtTodate.setText(sdf.format(myCalendar2.getTime()));
     }
 
 
-    // for getting all retail list
-    private void getRetailList() {
 
-
-        progressDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.PROGRESS_TYPE);
-        progressDialog.setTitle("Please wait...");
+    public void getModelList()
+    {
+        progressDialog = new SweetAlertDialog(ActivitySalesByRT.this, SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog.setTitle("Please wait....");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        String upLoadServerUri="https://sec.imslpro.com/api/android/get_retail_list.php";
+        String upLoadServerUri="https://sec.imslpro.com/api/android/get_product_list.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, upLoadServerUri,
                 new Response.Listener<String>() {
                     @Override
@@ -392,36 +321,34 @@ public class ActivityDailySales extends AppCompatActivity {
                             message = jsonObject.getString("message");
                             if(code.equals("true"))
                             {
-                                jsonArray = jsonObject.getJSONArray("retailList");
+                                jsonArray = jsonObject.getJSONArray("productList");
                                 for (int i = 0;i<jsonArray.length();i++)
                                 {
-                                    r = (jsonArray.getJSONObject(i).getString("name")+"("+jsonArray.getJSONObject(i).getString("territory_name")+")");
-                                    rid = (jsonArray.getJSONObject(i).getString("id"));
+                                    m = (jsonArray.getJSONObject(i).getString("name"));
+                                    mid = (jsonArray.getJSONObject(i).getString("id"));
 
                                     // adding to the list to show in dialog box with the count
-                                    retailList.add(r);
+                                    modelList.add(m);
 
                                     // mapping id to index serial of the retail
-                                    retailIdMap.put(i,rid);
-                                    retailTerritoryMap.put(i,jsonArray.getJSONObject(i).getString("territory_id"));
+                                    modelIdMap.put(i,mid);
                                 }
-
                                 getTerrirotyList();
                             }
                             else
                             {
-                                CustomUtility.showError(ActivityDailySales.this,message,"Failed");
+                                CustomUtility.showError(ActivitySalesByRT.this,message,"Failed");
                             }
 
                         } catch (JSONException e) {
-                            CustomUtility.showError(ActivityDailySales.this, "Failed to get data", "Failed");
+                            CustomUtility.showError(ActivitySalesByRT.this, "Failed to get data", "Failed");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                pDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.ERROR_TYPE);
+                pDialog = new SweetAlertDialog(ActivitySalesByRT.this, SweetAlertDialog.ERROR_TYPE);
                 pDialog.setTitleText("Network Error");
                 pDialog.setConfirmText("Ok");
                 pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -439,13 +366,12 @@ public class ActivityDailySales extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("UserId",sharedPreferences.getString("id",null));
+                //params.put("UserId",sharedPreferences.getString("id",null));
                 return params;
             }
         };
 
-        MySingleton.getInstance(ActivityDailySales.this).addToRequestQue(stringRequest);
-
+        MySingleton.getInstance(ActivitySalesByRT.this).addToRequestQue(stringRequest);
     }
 
 
@@ -453,7 +379,7 @@ public class ActivityDailySales extends AppCompatActivity {
     private void getTerrirotyList() {
 
 
-        progressDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog = new SweetAlertDialog(ActivitySalesByRT.this, SweetAlertDialog.PROGRESS_TYPE);
         progressDialog.setTitle("Please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -486,22 +412,22 @@ public class ActivityDailySales extends AppCompatActivity {
                                 }
 
                                 // getting model list
-                                getModelList();
+                                getDetails();
                             }
                             else
                             {
-                                CustomUtility.showError(ActivityDailySales.this,message,"Failed");
+                                CustomUtility.showError(ActivitySalesByRT.this,message,"Failed");
                             }
 
                         } catch (JSONException e) {
-                            CustomUtility.showError(ActivityDailySales.this, "Failed to get data", "Failed");
+                            CustomUtility.showError(ActivitySalesByRT.this, "Failed to get data", "Failed");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                pDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.ERROR_TYPE);
+                pDialog = new SweetAlertDialog(ActivitySalesByRT.this, SweetAlertDialog.ERROR_TYPE);
                 pDialog.setTitleText("Network Error");
                 pDialog.setConfirmText("Ok");
                 pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -524,82 +450,8 @@ public class ActivityDailySales extends AppCompatActivity {
             }
         };
 
-        MySingleton.getInstance(ActivityDailySales.this).addToRequestQue(stringRequest);
+        MySingleton.getInstance(ActivitySalesByRT.this).addToRequestQue(stringRequest);
 
-    }
-
-    public void getModelList()
-    {
-        progressDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.PROGRESS_TYPE);
-        progressDialog.setTitle("Please wait....");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        String upLoadServerUri="https://sec.imslpro.com/api/android/get_product_list.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, upLoadServerUri,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-                            progressDialog.dismiss();
-                            Log.e("response",response);
-                            jsonObject = new JSONObject(response);
-                            code = jsonObject.getString("success");
-                            message = jsonObject.getString("message");
-                            if(code.equals("true"))
-                            {
-                                jsonArray = jsonObject.getJSONArray("productList");
-                                for (int i = 0;i<jsonArray.length();i++)
-                                {
-                                    m = (jsonArray.getJSONObject(i).getString("name"));
-                                    mid = (jsonArray.getJSONObject(i).getString("id"));
-
-                                    // adding to the list to show in dialog box with the count
-                                    modelList.add(m);
-
-                                    // mapping id to index serial of the retail
-                                    modelIdMap.put(i,mid);
-                                }
-                                getDetails();
-                            }
-                            else
-                            {
-                                CustomUtility.showError(ActivityDailySales.this,message,"Failed");
-                            }
-
-                        } catch (JSONException e) {
-                            CustomUtility.showError(ActivityDailySales.this, "Failed to get data", "Failed");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-                pDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.ERROR_TYPE);
-                pDialog.setTitleText("Network Error");
-                pDialog.setConfirmText("Ok");
-                pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        pDialog.dismiss();
-                        startActivity(getIntent());
-                        finish();
-                    }
-                });
-                pDialog.show();
-                //CustomUtility.showError(AddCustomerSales.this, "Try again", "Network Error");
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                //params.put("UserId",sharedPreferences.getString("id",null));
-                return params;
-            }
-        };
-
-        MySingleton.getInstance(ActivityDailySales.this).addToRequestQue(stringRequest);
     }
 
     public void getDetails() {
@@ -607,10 +459,10 @@ public class ActivityDailySales extends AppCompatActivity {
         dataList.clear();
 
 
-        sweetAlertDialog = new SweetAlertDialog(ActivityDailySales.this, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog = new SweetAlertDialog(ActivitySalesByRT.this, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.setTitleText("Loading");
         sweetAlertDialog.show();
-        String upLoadServerUri = "https://sec.imslpro.com/api/android/get_sales_by_day.php";
+        String upLoadServerUri = "https://sec.imslpro.com/api/android/get_sales_group_summary.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, upLoadServerUri,
                 new Response.Listener<String>() {
                     @Override
@@ -619,34 +471,39 @@ public class ActivityDailySales extends AppCompatActivity {
                             sweetAlertDialog.dismiss();
                             Log.e("response",response);
                             jsonObject = new JSONObject(response);
-                            String code = jsonObject.getString("success");
-                            String message = jsonObject.getString("message");
+                            code = jsonObject.getString("success");
+                            message = jsonObject.getString("message");
+                            SalesByRTDataModel salesByRTDataModel;
+                            Integer trgtQuantity=0, saleQuantity=0, trgtAmount=0, saleAmount=0;
                             if (code.equals("true")) {
-                                Integer totalVol = 0, totalVal = 0;
-                                DailySalesDataModel dailySalesDataModel;
+                                int sum = 0;
+                                int total = 0;
                                 jsonArray = jsonObject.getJSONArray("saleResult");
                                 for (int i = 0; i< jsonArray.length(); i++)
                                 {
-                                    totalVol = totalVol + Integer.valueOf(jsonArray.getJSONObject(i).getString("sale_volume"));
-                                    totalVal = totalVal + Integer.valueOf(jsonArray.getJSONObject(i).getString("sale_value"));
-                                    dailySalesDataModel = new DailySalesDataModel(jsonArray.getJSONObject(i).getString("sale_date"),
-                                            jsonArray.getJSONObject(i).getString("sale_volume"),jsonArray.getJSONObject(i).getString("sale_value"));
-                                    dataList.add(dailySalesDataModel);
+                                    jo = jsonArray.getJSONObject(i);
+                                    trgtQuantity += Integer.parseInt(jo.getString("target_quantity"));
+                                    saleQuantity += Integer.parseInt(jo.getString("sale_quantity"));
+                                    trgtAmount += Integer.parseInt(jo.getString("target_amount"));
+                                    saleAmount += Integer.parseInt(jo.getString("sale_amount"));
+                                    salesByRTDataModel = new SalesByRTDataModel(jo.getString("name"), jo.getString("dms_code"),jo.getString("target_quantity"),
+                                            jo.getString("sale_quantity"),jo.getString("target_amount"),jo.getString("sale_amount"));
+                                    dataList.add(salesByRTDataModel);
                                 }
-
-                                dailySalesDataModel = new DailySalesDataModel("Total"+"("+String.valueOf(dataList.size())+")",String.valueOf(totalVol),String.valueOf(totalVal));
-                                dataList.add(dailySalesDataModel);
+                                salesByRTDataModel = new SalesByRTDataModel("Total("+String.valueOf(dataList.size())+")","",String.valueOf(trgtQuantity),
+                                        String.valueOf(saleQuantity),String.valueOf(trgtAmount),String.valueOf(saleAmount));
+                                dataList.add(salesByRTDataModel);
                                 mAdapter.notifyDataSetChanged();
-
                             }
                             else{
                                 Log.e("mess",message);
-                                CustomUtility.showError(ActivityDailySales.this,message,"Failed");
+                                CustomUtility.showError(ActivitySalesByRT.this,message,"Failed");
                                 dataList.clear();
                                 mAdapter.notifyDataSetChanged();
+                                return;
                             }
                         } catch (JSONException e) {
-                            CustomUtility.showError(ActivityDailySales.this, e.getMessage(), "Getting Response");
+                            CustomUtility.showError(ActivitySalesByRT.this, e.getMessage(), "Getting Response");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -654,23 +511,24 @@ public class ActivityDailySales extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 sweetAlertDialog.dismiss();
                 Log.e("res",error.toString());
-                CustomUtility.showError(ActivityDailySales.this, "Network Error, try again!", "Failed");
+                CustomUtility.showError(ActivitySalesByRT.this, "Network Error, try again!", "Failed");
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("UserId",sharedPreferences.getString("id",null));
-                params.put("SaleDateStart",fromDate);
-                params.put("SaleDateEnd",toDate);
-                if (!retailId.equals("")) params.put("RetailId",retailId);
-                if(!modelId.equals("")) params.put("ProductId",modelId);
+                params.put("ProductId",modelId);
                 params.put("TerritoryId",territoryId);
+                params.put("GroupStyle","retail");
+                params.put("DateStart",fromDate);
+                params.put("DateEnd",toDate);
                 return params;
             }
         };
 
-        MySingleton.getInstance(ActivityDailySales.this).addToRequestQue(stringRequest);
+        MySingleton.getInstance(ActivitySalesByRT.this).addToRequestQue(stringRequest);
+
     }
 
 
@@ -678,9 +536,9 @@ public class ActivityDailySales extends AppCompatActivity {
     // data adapter class for showing the list
     public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
 
-        private List<DailySalesDataModel> dataList;
+        private List<SalesByRTDataModel> dataList;
 
-        public DataAdapter(List<DailySalesDataModel> dataList) {
+        public DataAdapter(List<SalesByRTDataModel> dataList) {
             this.dataList = dataList;
         }
 
@@ -688,17 +546,24 @@ public class ActivityDailySales extends AppCompatActivity {
         @Override
         public DataAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.daily_sales_row_layout, parent, false);
+                    .inflate(R.layout.sales_by_retailer_row_layout, parent, false);
             return new DataAdapter.MyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull DataAdapter.MyViewHolder holder, int position) {
-            final DailySalesDataModel data = dataList.get(position);
-            holder.date.setText(data.getDate());
-            holder.saleVolume.setText(data.getSaleVolume());
-            holder.saleValue.setText(data.getSaleValue());
-            if((position == dataList.size()-1))
+            final SalesByRTDataModel data = dataList.get(position);
+            holder.retail.setText(data.getRetailer());
+            holder.dmsCode.setText(data.getDmsCode());
+            holder.tgtVolume.setText(data.getTgtVolume());
+            holder.achVolume.setText(data.getAchVolume());
+            holder.tgtValue.setText(data.getTgtValue());
+            holder.achValue.setText(data.getAchValue());
+            if(Integer.parseInt(data.getAchVolume())<=0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.light_red);
+            }
+            else  if((position == dataList.size()-1))
             {
                 holder.rowLayout.setBackgroundResource(R.color.white);
             }
@@ -721,19 +586,19 @@ public class ActivityDailySales extends AppCompatActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView date, saleVolume, saleValue;
+            TextView retail, dmsCode, tgtVolume, achVolume, tgtValue, achValue;
             ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
                 rowLayout = convertView.findViewById(R.id.rowLayout);
-                date =  convertView.findViewById(R.id.date);
-                saleValue =  convertView.findViewById(R.id.saleValue);
-                saleVolume =  convertView.findViewById(R.id.saleVolume);
-
+                retail =  convertView.findViewById(R.id.retail);
+                dmsCode =  convertView.findViewById(R.id.dmsCode);
+                tgtVolume =  convertView.findViewById(R.id.trgtVolume);
+                achVolume = convertView.findViewById(R.id.achVolume);
+                tgtValue = convertView.findViewById(R.id.trgtValue);
+                achValue = convertView.findViewById(R.id.achValue);
             }
         }
     }
-
 
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -228,6 +229,15 @@ public class MyDailyAttendance extends AppCompatActivity {
                 holder.status.setTextColor(Color.parseColor("#148026"));
             }
 
+            if(position%2 == 0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.even);
+            }
+            else
+            {
+                holder.rowLayout.setBackgroundResource(R.color.odd);
+            }
+
 
         }
 
@@ -238,10 +248,10 @@ public class MyDailyAttendance extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView date,status;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 date =  convertView.findViewById(R.id.date);
                 status =  convertView.findViewById(R.id.status);
             }

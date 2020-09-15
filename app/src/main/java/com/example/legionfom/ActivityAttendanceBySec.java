@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -427,6 +428,14 @@ public class ActivityAttendanceBySec extends AppCompatActivity {
             holder.rtClose.setText(data.getRtClose());
             holder.absent.setText(data.getAbsent());
             holder.total.setText(data.getTotal());
+            if(position%2 == 0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.even);
+            }
+            else
+            {
+                holder.rowLayout.setBackgroundResource(R.color.odd);
+            }
         }
 
         @Override
@@ -436,10 +445,10 @@ public class ActivityAttendanceBySec extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView retailer, sec, present, dayOff, training, casualLeave, sickLeave, halfDayLeave, totalLeave, rtClose, absent, total;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 retailer = convertView.findViewById(R.id.retailer);
                 sec = convertView.findViewById(R.id.sec);
                 present = convertView.findViewById(R.id.present);

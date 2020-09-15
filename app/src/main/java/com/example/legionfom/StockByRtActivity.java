@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -364,6 +365,8 @@ public class StockByRtActivity extends AppCompatActivity {
                             jsonObject = new JSONObject(response);
                             String code = jsonObject.getString("success");
                             String message = jsonObject.getString("message");
+                            StockShowByRTDataModel stockShowByRTDataModel;
+                            Integer quantity=0, amount = 0;
                             if (code.equals("true")) {
                                 int sum = 0;
                                 int total = 0;
@@ -371,12 +374,16 @@ public class StockByRtActivity extends AppCompatActivity {
                                 for (int i = 0; i< jsonArray.length(); i++)
                                 {
                                     jo = jsonArray.getJSONObject(i);
-                                    StockShowByRTDataModel stockShowByRTDataModel = new StockShowByRTDataModel(jo.getString("name"),jo.getString("dms_code"),"","",
+                                    quantity += Integer.parseInt(jo.getString("total_quantity"));
+                                    amount += Integer.parseInt(jo.getString("total_amount"));
+                                    stockShowByRTDataModel = new StockShowByRTDataModel(jo.getString("name"),jo.getString("dms_code"),"","",
                                             jo.getString("total_quantity"),jo.getString("total_amount"));
                                     dataList.add(stockShowByRTDataModel);
-                                    mAdapter.notifyDataSetChanged();
                                 }
-
+                                stockShowByRTDataModel = new StockShowByRTDataModel("Total("+String.valueOf(dataList.size())+")","","","",
+                                        String.valueOf(quantity),String.valueOf(amount));
+                                dataList.add(stockShowByRTDataModel);
+                                mAdapter.notifyDataSetChanged();
                             }
                             else{
                                 Log.e("mess",message);
@@ -440,7 +447,25 @@ public class StockByRtActivity extends AppCompatActivity {
             holder.dmsCode.setText(data.getDmsCode());
             holder.volume.setText(data.getVolume());
             holder.value.setText(data.getValue());
-
+            if(Integer.parseInt(data.getVolume())<=0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.light_red);
+            }
+            else  if((position == dataList.size()-1))
+            {
+                holder.rowLayout.setBackgroundResource(R.color.white);
+            }
+            else
+            {
+                if(position%2 == 0)
+                {
+                    holder.rowLayout.setBackgroundResource(R.color.even);
+                }
+                else
+                {
+                    holder.rowLayout.setBackgroundResource(R.color.odd);
+                }
+            }
         }
 
         @Override
@@ -450,10 +475,10 @@ public class StockByRtActivity extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView retailer,dmsCode, volume, value;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 retailer =  convertView.findViewById(R.id.retailer);
                 dmsCode = convertView.findViewById(R.id.dmsCode);
                 volume = convertView.findViewById(R.id.volume);

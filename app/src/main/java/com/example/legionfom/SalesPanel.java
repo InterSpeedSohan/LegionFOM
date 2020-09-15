@@ -13,7 +13,7 @@ public class SalesPanel extends AppCompatActivity {
 
     ImageButton homeBtn;
 
-    Button dailySalesBtn, saleByRTBtn, saleByPrBtn;
+    Button dailySalesBtn, saleByTerr, saleByRTBtn, saleByPrBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,6 +22,7 @@ public class SalesPanel extends AppCompatActivity {
 
         homeBtn = findViewById(R.id.homeBtn);
         dailySalesBtn = findViewById(R.id.dailySalesBtn);
+        saleByTerr = findViewById(R.id.salesByTerritoriesBtn);
         saleByRTBtn = findViewById(R.id.salesByRetailersBtn);
         saleByPrBtn = findViewById(R.id.salesByProductBtn);
 
@@ -31,7 +32,13 @@ public class SalesPanel extends AppCompatActivity {
                 startActivity(new Intent(SalesPanel.this,ActivityDailySales.class));
             }
         });
-/*
+
+        saleByTerr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SalesPanel.this,ActivitySalesByTerritory.class));
+            }
+        });
         saleByRTBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,14 +52,12 @@ public class SalesPanel extends AppCompatActivity {
                 startActivity(new Intent(SalesPanel.this,ActivitySalesByProduct.class));
             }
         });
-
-        homeBtn.setOnClickListener(new View.OnClickListener() {
+          homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
- */
     }
 }

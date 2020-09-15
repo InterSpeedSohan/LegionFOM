@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -359,7 +360,10 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
                                 String code = jsonObject.getString("success");
                                 String message = jsonObject.getString("message");
                                 String present, dayoff, late, casual, sick, halfday, absent, rtclose, training ;
+
+                                Integer ttlpresent=0, total_dayOff=0, total_casulLeave=0, total_sickLeave=0, total_halfDayLeave=0, total_absent=0, total_rtClose=0, total_training=0,ttl_leave = 0,ttl_ttl = 0;
                                 int total_leave, total, total_present;
+                                SecDailyAttendanceDataModel secDailyAttendanceDataModel;
                                 if (code.equals("true")) {
                                     jsonArray = jsonObject.getJSONArray("resultList");
                                     for (int i = 0; i< jsonArray.length(); i++)
@@ -378,12 +382,28 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
                                         total_present = Integer.parseInt(present) + Integer.parseInt(late);
                                         total_leave = Integer.parseInt(casual) + Integer.parseInt(sick) + Integer.parseInt(halfday);
                                         total = total_present + Integer.parseInt(dayoff) + Integer.parseInt(absent) + Integer.parseInt(rtclose) + Integer.parseInt(training);
-                                        SecDailyAttendanceDataModel secDailyAttendanceDataModel = new SecDailyAttendanceDataModel("","","",
+
+                                        ttlpresent += (total_present);
+                                        total_dayOff += Integer.parseInt(dayoff);
+                                        total_casulLeave += Integer.parseInt(casual);
+                                        total_sickLeave += Integer.parseInt(sick);
+                                        total_halfDayLeave += Integer.parseInt(halfday);
+                                        total_absent += Integer.parseInt(absent);
+                                        total_rtClose += Integer.parseInt(rtclose);
+                                        total_training += Integer.parseInt(training);
+                                        ttl_leave += total_leave;
+                                        ttl_ttl += total;
+
+                                        secDailyAttendanceDataModel = new SecDailyAttendanceDataModel("","","",
                                                 jo.getString("date"),String.valueOf(total_present),dayoff,training,casual,sick,halfday,String.valueOf(total_leave),rtclose,absent,String.valueOf(total));
                                         dataList.add(secDailyAttendanceDataModel);
-                                        mAdapter.notifyDataSetChanged();
                                     }
-
+                                    secDailyAttendanceDataModel = new SecDailyAttendanceDataModel("","","",
+                                            "Total("+String.valueOf(dataList.size())+")",String.valueOf(ttlpresent),String.valueOf(total_dayOff),String.valueOf(total_training),
+                                            String.valueOf(total_casulLeave),String.valueOf(total_casulLeave),String.valueOf(total_halfDayLeave),String.valueOf(ttl_leave),String.valueOf(total_rtClose),
+                                            String.valueOf(total_absent),String.valueOf(ttl_ttl));
+                                    dataList.add(secDailyAttendanceDataModel);
+                                    mAdapter.notifyDataSetChanged();
                                 }
                                 else{
                                     Log.e("mess",message);
@@ -459,6 +479,14 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
             holder.rtClose.setText(data.getRtClose());
             holder.absent.setText(data.getAbsent());
             holder.total.setText(data.getTotal());
+            if(position%2 == 0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.even);
+            }
+            else
+            {
+                holder.rowLayout.setBackgroundResource(R.color.odd);
+            }
         }
 
         @Override
@@ -468,10 +496,10 @@ public class ActivitySecDailyAttendance extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView date, present, dayOff, training, casualLeave, sickLeave, halfDayLeave, totalLeave, rtClose, absent, total;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 date = convertView.findViewById(R.id.date);
                 present = convertView.findViewById(R.id.present);
                 dayOff = convertView.findViewById(R.id.dayOff);

@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -306,6 +307,14 @@ public class ActivityTeamAttendance extends AppCompatActivity {
 
                 }
             });
+            if(position%2 == 0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.even);
+            }
+            else
+            {
+                holder.rowLayout.setBackgroundResource(R.color.odd);
+            }
         }
 
         @Override
@@ -316,10 +325,10 @@ public class ActivityTeamAttendance extends AppCompatActivity {
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView id, name, territory,status, time, gps;
             ImageView image;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 id =  convertView.findViewById(R.id.id);
                 name =  convertView.findViewById(R.id.name);
                 territory =  convertView.findViewById(R.id.territory);

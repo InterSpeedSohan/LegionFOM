@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -379,6 +380,8 @@ public class StockByProductActivity extends AppCompatActivity {
                             jsonObject = new JSONObject(response);
                             String code = jsonObject.getString("success");
                             String message = jsonObject.getString("message");
+                            StockShowingByProDataModel stockShowingByProDataModel;
+                            Integer quantity=0, amount = 0;
                             if (code.equals("true")) {
                                 int sum = 0;
                                 int total = 0;
@@ -386,12 +389,16 @@ public class StockByProductActivity extends AppCompatActivity {
                                 for (int i = 0; i< jsonArray.length(); i++)
                                 {
                                     jo = jsonArray.getJSONObject(i);
-                                    StockShowingByProDataModel stockShowingByProDataModel = new StockShowingByProDataModel(jo.getString("name"),jo.getString("unit_price"),
+                                    quantity += Integer.parseInt(jo.getString("total_quantity"));
+                                    amount += Integer.parseInt(jo.getString("total_amount"));
+                                    stockShowingByProDataModel = new StockShowingByProDataModel(jo.getString("name"),jo.getString("unit_price"),
                                             jo.getString("total_quantity"),jo.getString("total_amount"));
                                     dataList.add(stockShowingByProDataModel);
-                                    mAdapter.notifyDataSetChanged();
                                 }
-
+                                stockShowingByProDataModel = new StockShowingByProDataModel("Total("+String.valueOf(dataList.size())+")","",
+                                        String.valueOf(quantity),String.valueOf(amount));
+                                dataList.add(stockShowingByProDataModel);
+                                mAdapter.notifyDataSetChanged();
                             }
                             else{
                                 Log.e("mess",message);
@@ -453,7 +460,25 @@ public class StockByProductActivity extends AppCompatActivity {
             holder.price.setText(data.getPrice());
             holder.volume.setText(data.getVolume());
             holder.value.setText(data.getValue());
-
+            if(Integer.parseInt(data.getVolume())<=0)
+            {
+                holder.rowLayout.setBackgroundResource(R.color.light_red);
+            }
+            else  if((position == dataList.size()-1))
+            {
+                holder.rowLayout.setBackgroundResource(R.color.white);
+            }
+            else
+            {
+                if(position%2 == 0)
+                {
+                    holder.rowLayout.setBackgroundResource(R.color.even);
+                }
+                else
+                {
+                    holder.rowLayout.setBackgroundResource(R.color.odd);
+                }
+            }
         }
 
         @Override
@@ -463,10 +488,10 @@ public class StockByProductActivity extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView product, price, volume, value;
-
+            ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
-
+                rowLayout = convertView.findViewById(R.id.rowLayout);
                 product =  convertView.findViewById(R.id.product);
                 price = convertView.findViewById(R.id.price);
                 volume = convertView.findViewById(R.id.volume);
