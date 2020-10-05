@@ -38,7 +38,7 @@ public class ActivityAttendancePanel extends AppCompatActivity {
         yourAttendanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!ActivityDockPanel.presentFlag)
+                if (true)       //if(!ActivityDockPanel.presentFlag)
                 {
                     startActivity(new Intent(ActivityAttendancePanel.this,YourAttendancePanel.class));
                     finish();

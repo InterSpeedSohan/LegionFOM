@@ -2,7 +2,7 @@
     <string name="app_name">LegionFOM</string>
     <string name="gps_network_not_enabled">Gps not enabled</string>
     <string name="absent">You are absent</string>
-    <string name="absent_brief">You are absent. Please follow the steps given below.</string>
+    <string name="absent_brief">Please follow the steps given below.</string>
     <string name="attendance_instructions"> -- Make sure you have gps turned on. Then press "Locate Position" and wait for gps accurracy
     \n      -- Turn off auto-rotation in your phone. Then press "Take Selfie"
     \n      -- Finally press the submit button

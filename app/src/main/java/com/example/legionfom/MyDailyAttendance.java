@@ -216,6 +216,7 @@ public class MyDailyAttendance extends AppCompatActivity {
 
             holder.date.setText(data.getDate());
             holder.status.setText(data.getStatus());
+            holder.time.setText(data.getTime());
             if(data.getStatus().equals("Late"))
             {
                 holder.status.setTextColor(Color.parseColor("#FF9800"));
@@ -228,13 +229,9 @@ public class MyDailyAttendance extends AppCompatActivity {
             {
                 holder.status.setTextColor(Color.parseColor("#148026"));
             }
-
-            if(position%2 == 0)
-            {
+            if (position % 2 == 0) {
                 holder.rowLayout.setBackgroundResource(R.color.even);
-            }
-            else
-            {
+            } else {
                 holder.rowLayout.setBackgroundResource(R.color.odd);
             }
 
@@ -247,13 +244,14 @@ public class MyDailyAttendance extends AppCompatActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView date,status;
+            TextView date,status,time;
             ConstraintLayout rowLayout;
             public MyViewHolder(View convertView) {
                 super(convertView);
                 rowLayout = convertView.findViewById(R.id.rowLayout);
                 date =  convertView.findViewById(R.id.date);
                 status =  convertView.findViewById(R.id.status);
+                time = convertView.findViewById(R.id.time);
             }
         }
     }
@@ -283,7 +281,8 @@ public class MyDailyAttendance extends AppCompatActivity {
                                 for (int i = 0; i< jsonArray.length(); i++)
                                 {
                                     jo = jsonArray.getJSONObject(i);
-                                    MyDailyAttendanceDataModel myDailyAttendanceDataModel = new MyDailyAttendanceDataModel(jo.getString("attendance_date"),jo.getString("attendance_status_name"));
+                                    MyDailyAttendanceDataModel myDailyAttendanceDataModel = new MyDailyAttendanceDataModel(jo.getString("attendance_date"),
+                                            jo.getString("attendance_status_name"),jo.getString("in_time"));
                                     dataList.add(myDailyAttendanceDataModel);
                                     mAdapter.notifyDataSetChanged();
                                 }
