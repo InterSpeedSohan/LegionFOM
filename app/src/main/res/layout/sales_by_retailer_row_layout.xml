@@ -50,7 +50,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/trgtVolume"
+                android:id="@+id/tgtVolume"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -70,17 +70,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:fontFamily="@font/arial"
                 android:text="ACH Volume"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:gravity="center"
+                android:fontFamily="@font/arial"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/trgtVolume"
+                app:layout_constraintStart_toEndOf="@+id/tgtVolume"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
-                android:id="@+id/trgtValue"
+                android:id="@+id/achVolPercentage"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/arial"
+                android:text="ACH Vol%"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/bkgd_level"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/achVolume"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tgtValue"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -91,7 +105,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/achVolume"
+                app:layout_constraintStart_toEndOf="@+id/achVolPercentage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -106,7 +120,22 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/trgtValue"
+                app:layout_constraintStart_toEndOf="@+id/tgtValue"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/achValPercentage"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/arial"
+                android:text="ACH Val%"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/bkgd_level"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/achValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

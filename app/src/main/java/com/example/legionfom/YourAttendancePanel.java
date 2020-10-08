@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,7 +86,8 @@ public class YourAttendancePanel extends AppCompatActivity {
 
     ImageButton homeBtn;
 
-
+    EditText edtRemark;
+    String remark = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +102,7 @@ public class YourAttendancePanel extends AppCompatActivity {
         cameraBtn = findViewById(R.id.cameraBtn);
         submitBtn = findViewById(R.id.btnSubmit);
         homeBtn = findViewById(R.id.homeBtn);
-
+        edtRemark = findViewById(R.id.edtRemark);
         location = findViewById(R.id.gpsAccuracy);
         takeSelfieText = findViewById(R.id.imageStatus);
 
@@ -169,7 +171,7 @@ public class YourAttendancePanel extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 networkAvailable = CustomUtility.haveNetworkConnection(YourAttendancePanel.this);
-
+                remark = edtRemark.getText().toString();
                 int f = checkfields();
                 if(f==1)
                 {
@@ -265,6 +267,14 @@ public class YourAttendancePanel extends AppCompatActivity {
                             if(code.equals("true"))
                             {
                                 code = "Successful";
+                                File fdelete = new File(currentPhotoPath);
+                                if (fdelete.exists()) {
+                                    if (fdelete.delete()) {
+                                        System.out.println("file Deleted :" + currentPhotoPath);
+                                    } else {
+                                        System.out.println("file not Deleted :" + currentPhotoPath);
+                                    }
+                                }
                                 new SweetAlertDialog(YourAttendancePanel.this, SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Successful")
                                         .setContentText("")
@@ -311,6 +321,7 @@ public class YourAttendancePanel extends AppCompatActivity {
                 params.put("InTimePictureName",photoName);
                 params.put("InPictureData",imageString);
                 params.put("DeviceDateTime",deviceDate);
+                params.put("Remark",remark);
                 return params;
             }
         };

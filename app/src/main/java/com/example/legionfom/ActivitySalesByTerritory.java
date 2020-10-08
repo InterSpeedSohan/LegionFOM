@@ -38,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,7 +85,7 @@ public class ActivitySalesByTerritory extends AppCompatActivity {
     ArrayList modelList = new ArrayList<String>();
     Map<Integer,String> modelIdMap = new HashMap<>();
     String  m, mid;
-
+    DecimalFormat df = new DecimalFormat("#.##");
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -437,6 +438,29 @@ public class ActivitySalesByTerritory extends AppCompatActivity {
             holder.achVolume.setText(data.getAchVolume());
             holder.tgtValue.setText(data.getTgtValue());
             holder.achValue.setText(data.getAchValue());
+
+            if(Long.parseLong(data.getTgtVolume()) > 0)
+            {
+                float perc = (float) (Float.parseFloat(data.getAchVolume())/Float.parseFloat(data.getTgtVolume())*100.0);
+                holder.achVolPerc.setText(df.format(perc)+"%");
+                Log.e("ach vol per",String.valueOf(perc));
+                holder.achVolPerc.getBackground().setLevel((int) (perc*100));
+            }
+            else
+            {
+                holder.achVolPerc.setText("0%");
+            }
+            if(Long.parseLong(data.getTgtValue()) > 0)
+            {
+                float perc = (float) (Float.parseFloat(data.getAchValue())/Float.parseFloat(data.getTgtValue())*100.0);
+                holder.achValPerc.setText(df.format(perc)+"%");
+                holder.achValPerc.getBackground().setLevel((int) (perc*100));
+            }
+            else
+            {
+                holder.achValPerc.setText("0%");
+            }
+
             if(Integer.parseInt(data.getAchVolume())<=0)
             {
                 holder.rowLayout.setBackgroundResource(R.color.light_red);
@@ -464,17 +488,19 @@ public class ActivitySalesByTerritory extends AppCompatActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView territory, tgtVolume, achVolume, tgtValue, achValue;
+            TextView territory, tgtVolume, achVolume, tgtValue, achValue,achVolPerc,achValPerc;
             ConstraintLayout rowLayout;
 
             public MyViewHolder(View convertView) {
                 super(convertView);
                 rowLayout = convertView.findViewById(R.id.rowLayout);
                 territory =  convertView.findViewById(R.id.territory);
-                tgtVolume =  convertView.findViewById(R.id.trgtVolume);
+                tgtVolume =  convertView.findViewById(R.id.tgtVolume);
                 achVolume = convertView.findViewById(R.id.achVolume);
-                tgtValue = convertView.findViewById(R.id.trgtValue);
+                tgtValue = convertView.findViewById(R.id.tgtValue);
                 achValue = convertView.findViewById(R.id.achValue);
+                achVolPerc = convertView.findViewById(R.id.achVolPercentage);
+                achValPerc = convertView.findViewById(R.id.achValPercentage);
             }
         }
     }

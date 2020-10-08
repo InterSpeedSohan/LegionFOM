@@ -21,6 +21,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ActivityAttendancePanel"
             android:screenOrientation="portrait"/>
+        <activity android:name=".YourAttendancePanel"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ActivityDockPanel"
             android:screenOrientation="portrait"/>
         <activity android:name=".SalesPanel"
@@ -28,8 +30,6 @@
         <activity android:name=".StatePanelActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".StockPanelActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".YourAttendancePanel"
             android:screenOrientation="portrait"/>
         <activity android:name=".MyAttendanceSummaryActivity"
             android:screenOrientation="portrait"/>
